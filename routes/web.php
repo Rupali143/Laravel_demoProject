@@ -26,3 +26,13 @@ Route::resource('category','CategoryController');
 Route::post('updateOrder','CategoryController@updateOrder')->name('update.order');
 
 Route::get('/logout',array('as' => 'logout','uses' =>'Auth\LoginController@logout'));
+
+Route::get('/test',function (){
+  return view('test');
+});
+
+Route::get('delete_order/{id}', 'ProductController@deleteorder')->name('delete.order');
+
+//Route::get('delete','ProductController@delete');
+
+Route::post('updateSort','CategoryController@updateSort')->name('update.sort');

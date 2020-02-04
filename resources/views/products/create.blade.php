@@ -1,10 +1,40 @@
 @extends('layouts.master')
 @section('main-content')
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>
+
+    <style>
+        input[type="file"] {
+            display: block;
+        }
+        .imageThumb {
+            max-height: 75px;
+            border: 2px solid;
+            padding: 1px;
+            cursor: pointer;
+        }
+        .pip {
+            display: inline-block;
+            margin: 10px 10px 0 0;
+        }
+        .remove {
+            display: block;
+            background: #444;
+            border: 1px solid black;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+        }
+        .remove:hover {
+            background: white;
+            color: black;
+        }
+        </style>
+    {{--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">--}}
+
+    {{--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>--}}
+
+    {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>--}}
     {{--<style type="text/css">--}}
 
         {{--input[type=file]{--}}
@@ -113,9 +143,10 @@
                             <div class="form-group row">
                                 <label class="col-xl-3 col-lg-3 col-form-label">Image</label>
                                 <div class="col-lg-9 col-xl-6">
-                                    <input class="form-control" type="file" name="images[]"  id="images" multiple="">
+                                    <input class="form-control" type="file" name="files[]"  id="files" multiple="">
                                 </div>
                             </div>
+                            {{--<input type="file" id="files" name="files[]" multiple />--}}
                             <div class="row" id="image_preview">
                             <div class="form-group col-8">
                                 <input type="submit" class="btn btn-brand btn-bold pull-right" value="Save Changes" style="margin-left: 20px;">
@@ -126,31 +157,60 @@
                     </div>
 
                 </div>
-
+                </div>
             </form>
     </div>
    </div>
 </div>
 @endsection
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        if (window.File && window.FileList && window.FileReader) {
+            $("#files").on("change", function(e) {
+                var files = e.target.files,
+                        filesLength = files.length;
+                for (var i = 0; i < filesLength; i++) {
+                    var f = files[i]
+                    var fileReader = new FileReader();
+                    fileReader.onload = (function(e) {
+                        var file = e.target;
+                        $("<span class=\"pip\">" +
+                                "<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
+                                "<br/><span class=\"remove\">Remove image</span>" +
+                                "</span>").insertAfter("#files");
+                        $(".remove").click(function(){
+                            $(this).parent(".pip").remove();
+                        });
 
-<script type="text/javascript">
-
-    $("#images").change(function(){
-        $('#image_preview').html("");
-//        var total_file=document.getElementById("images").files.length;
-        var total_file = 4;
-        for(var i=0;i<total_file;i++)
-        {
-            $('#image_preview').append("<img src='"+URL.createObjectURL(event.target.files[i])+"'>");
+                    });
+                    fileReader.readAsDataURL(f);
+                }
+            });
+        } else {
+            alert("Your browser doesn't support to File API")
         }
     });
-    $('form').ajaxForm(function()
-    {
-        alert("Uploaded SuccessFully");
+    </script>
 
-    });
+{{--<script type="text/javascript">--}}
 
-</script>
+    {{--$("#images").change(function(){--}}
+        {{--$('#image_preview').html("");--}}
+{{--//        var total_file=document.getElementById("images").files.length;--}}
+        {{--var total_file = 4;--}}
+        {{--for(var i=0;i<total_file;i++)--}}
+        {{--{--}}
+            {{--$('#image_preview').append("<img src='"+URL.createObjectURL(event.target.files[i])+"'>");--}}
+        {{--}--}}
+    {{--});--}}
+    {{--$('form').ajaxForm(function()--}}
+    {{--{--}}
+        {{--alert("Uploaded SuccessFully");--}}
+
+    {{--});--}}
+
+{{--</script>--}}
 
 {{--<script>--}}
 {{--$(document).ready(function(){--}}

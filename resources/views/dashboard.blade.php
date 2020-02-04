@@ -120,11 +120,11 @@
                 <div class="kt-subheader  kt-grid__item" id="kt_subheader">
                     <div class="kt-container  kt-container--fluid ">
                         <div class="kt-subheader__main">
-                            <h3 class="kt-subheader__title">Dashboard1</h3>
+                            <h3 class="kt-subheader__title">Dashboard</h3>
                             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-                            <span class="kt-subheader__desc">#XRS-45670</span>
+                            {{--<span class="kt-subheader__desc">#XRS-45670</span>--}}
                             <a href="#" class="btn btn-label-warning btn-bold btn-sm btn-icon-h kt-margin-l-10">
-                                Add New
+                                {{--Add New--}}
                             </a>
                         </div>
                     </div>
@@ -142,15 +142,15 @@
                                 <div class="kt-portlet__head kt-portlet__space-x">
                                     <div class="kt-portlet__head-label">
                                         <h3 class="kt-portlet__head-title">
-                                            Inbound Bandwidth
+                                            Total Products
                                         </h3>
                                     </div>
                                 </div>
                                 <div class="kt-portlet__body kt-portlet__body--fluid">
                                     <div class="kt-widget20">
                                         <div class="kt-widget20__content kt-portlet__space-x">
-                                            <span class="kt-widget20__number kt-font-brand">670+</span>
-                                            <span class="kt-widget20__desc">Successful transactions</span>
+                                            <span class="kt-widget20__number kt-font-brand">{{$productCount}}</span>
+                                            {{--<span class="kt-widget20__desc">Total Products</span>--}}
                                         </div>
                                     </div>
                                 </div>

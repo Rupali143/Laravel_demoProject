@@ -61,11 +61,11 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'status' => 'required'
+            //'status' => 'required'
         ]);
         $category = new Category();
         $category->name = $request->input('name');
-        $category->status = $request->input('status');
+        $category->status = 1;
         $category->save();
 //        Category::create($request->all());
         return redirect()->route('category.index')
@@ -106,7 +106,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        dd($request);
+//        dd($request->input('name'));
         $validate =$request->validate([
             'name' => 'required',
          ]);
@@ -125,14 +125,53 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $product = Category::find($id)->delete();
-        return redirect()->route('category.index')->with('success','Category deleted Successfully');
+        $category = Category::find($id);
+
+//        dd($category);
+        if($category){
+            //$this->updateOrderId($category->categoryOrderby);
+            //$category1 = Category::find($id)->delete();
+        }
+            return redirect()->route('category.index')->with('success','Category deleted Successfully');
+//        }
+//        return redirect()->route('category.index')->with('success','Category deleted Successfully');
     }
 
+    public function updateOrderId($orderValue){
 
-    public function updateSort($id){
-//        $input = $request->all();
-        echo $id;
-        echo'hello';exit;
+        $category = Category::all();
+//        dd($orderValue);
+        $orderCategory = $category->where('categoryOrderby','>=',$orderValue);
+
+        foreach($orderCategory as $order){
+            $updateId = $order->categoryOrderby - 1;
+            Category::whereId($order->id)->update(['categoryOrderby' => $updateId]);
+        }
+    }
+
+//    public function updateSort($id){
+////        $input = $request->all();
+//        echo $id;
+//        echo'hello';exit;
+//    }
+
+
+    public function updateSort(Request $request)
+    {
+        $idToDelete = $request->deleteId;
+        $category = Category::find($idToDelete)->delete();
+
+        $displayOrder = $request->order;
+        if (($key = array_search($idToDelete, $displayOrder)) !== false) {
+            unset($displayOrder[$key]);
+        }
+
+        $displayOrder = array_values($displayOrder);
+        foreach ($displayOrder as $order => $catId) {
+            Category::whereId($catId)->update(['categoryOrderby' => $order]);
+
+            return redirect()->route('category.index')->with('success', 'Category deleted Successfully');
+//        return response('Update Successfully.', 200);
+        }
     }
 }

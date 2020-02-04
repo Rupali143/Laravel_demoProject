@@ -1,7 +1,35 @@
-
 @extends('layouts.master')
 
-<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+@section('main-content')
+<style>
+    input[type="file"] {
+        display: block;
+    }
+    .imageThumb {
+        max-height: 75px;
+        border: 2px solid;
+        padding: 1px;
+        cursor: pointer;
+    }
+    .pip {
+        display: inline-block;
+        margin: 10px 10px 0 0;
+    }
+    .remove {
+        display: block;
+        background: #444;
+        border: 1px solid black;
+        color: white;
+        text-align: center;
+        cursor: pointer;
+    }
+    .remove:hover {
+        background: white;
+        color: black;
+    }
+</style>
+{{--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>--}}
+{{--<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">--}}
     <!-- begin:: Subheader -->
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
         <div class="kt-container  kt-container--fluid ">
@@ -36,7 +64,7 @@
         </div>
     @endif
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        {{--<div class="tab-content  kt-margin-t-20">--}}
 
             <!--Begin:: Tab Content-->
             <div class="kt-portlet">
@@ -49,7 +77,7 @@
                 </div><br>
                 {{--<div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">--}}
 
-                <form class="kt-form kt-form--label-right" action="{{ route('product.update',$product->id) }}" method="post">
+                <form class="kt-form kt-form--label-right" action="{{ route('product.update',$product->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="kt-form__body">
@@ -84,6 +112,18 @@
 
                                     </div>
                                 </div>
+
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">Images</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <input class="form-control" type="file" name="files[]"  id="files" multiple="">
+                                        <br>
+                                     @foreach($productimage as $img)
+                                            <img src="/uploads/products/{{$img['images']}}" height="100px" width="100px" style="margin:10px;"/><button type="button" class="button-close" data-id="{{$img->id}}"><i class="fa fa-close"></i> close </button>
+                                        @endforeach
+
+                                    </div>
+                                </div>
                                 <div class="form-group col-8">
                                     <input type="submit" class="btn btn-brand btn-bold pull-right" value="Save Changes" style="margin-left: 20px;">
                                     <a href="{{ route('product.index') }}" type="button" class="btn btn-brand btn-bold pull-right">Back</a>
@@ -98,11 +138,63 @@
                 {{--</div>--}}
             </div>
         </div>
-    </div>
-</div>
+    {{--</div>--}}
+{{--</div>--}}
 <!--End:: Tab Content-->
+@endsection
+            @section('scripts')
+            <script src="{{asset('js/jquery1.12.js')}}"></script>
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
+    $(".button-close").click(function(){
+        var closeId =  $(this).attr("data-id");
+      {{--alert("{{url('delete')}}/"+closeId);--}}
+        $.ajax({
+            type:'get',
+            url: "{{url('delete_order')}}/"+closeId,
+            {{--data:{closeId:closeId ,_token: '{{ csrf_token() }}'},--}}
+            success:function(data){
+//                alert(data.success);
+                window.location.reload();
+            }
+        });
+    });
 
+</script>
 
+{{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>--}}
+<script>
+    $(document).ready(function() {
+        if (window.File && window.FileList && window.FileReader) {
+            $("#files").on("change", function(e) {
+                var files = e.target.files,
+                        filesLength = files.length;
+                for (var i = 0; i < filesLength; i++) {
+                    var f = files[i]
+                    var fileReader = new FileReader();
+                    fileReader.onload = (function(e) {
+                        var file = e.target;
+                        $("<span class=\"pip\">" +
+                                "<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
+                                "<br/><span class=\"remove\">Remove image</span>" +
+                                "</span>").insertAfter("#files");
+                        $(".remove").click(function(){
+                            $(this).parent(".pip").remove();
+                        });
 
+                    });
+                    fileReader.readAsDataURL(f);
+                }
+            });
+        } else {
+            alert("Your browser doesn't support to File API")
+        }
+    });
+</script>
 
+@endsection

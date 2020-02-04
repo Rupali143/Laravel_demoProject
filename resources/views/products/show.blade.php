@@ -1,7 +1,9 @@
 @extends('layouts.master')
 
+@section('main-content')
 
-<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+
+{{--<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">--}}
     <!-- begin:: Subheader -->
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
         <div class="kt-container  kt-container--fluid ">
@@ -23,7 +25,7 @@
     </div>
     <!-- end:: Subheader -->
     <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+        {{--<div class="tab-content  kt-margin-t-20">--}}
             <!--Begin:: Tab Content-->
             @if (session()->has('success'))
                 <div class="alert alert-success fade show" role="alert">
@@ -38,7 +40,7 @@
                 </div>
             @endif
             <div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">
-                <div class="row">
+                {{--<div class="row">--}}
                     <div class="col-xl-6">
                         <!--begin::Portlet-->
                         <div class="kt-portlet">
@@ -84,16 +86,16 @@
                         <!--end::Portlet-->
 
                     </div>
-                </div>
+                {{--</div>--}}
 
             </div>
             <!--end:: Tab Content-->
-        </div>
+        {{--</div>--}}
     </div>
-</div>
+{{--</div>--}}
+@endsection
 <script>
     setTimeout(function() {
         $('#alert').fadeOut('fast');
     }, 1500);
 </script>
-@extends('layouts.footer')

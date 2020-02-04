@@ -23,8 +23,8 @@
         margin-top:12px;
     }
 </style>
-<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
-    <!-- begin:: Subheader -->
+@section('main-content')
+    <div class="kt-portlet__body">
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
         <div class="kt-container  kt-container--fluid ">
             <div class="kt-subheader__main">
@@ -39,8 +39,8 @@
         </div>
     </div>
     <!-- end:: Subheader -->
-    <div class="kt-portlet__body">
-        <div class="tab-content  kt-margin-t-20">
+    {{--<div class="kt-portlet__body">--}}
+        {{--<div class="tab-content  kt-margin-t-20">--}}
             <!--Begin:: Tab Content-->
             @if (session()->has('success'))
                 <div class="alert alert-success" role="alert">
@@ -54,35 +54,35 @@
                     </div>
                 </div>
             @endif
-            <div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">
-                <div class="row">
-                    <div class="col-xl-6">
+            {{--<div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">--}}
+                {{--<div class="row">--}}
+                    {{--<div class="col-xl-6">--}}
                         <!--begin::Portlet-->
                         <div class="kt-portlet">
-                            <div class="kt-portlet__body">
+                            {{--<div class="kt-portlet__body">--}}
                                 {{--<div class="row">--}}
                                 <form class="kt-form kt-form--label-right" action="{{ route('category.store') }}" method="post">
                                     @csrf
                                     <div class="kt-form__body">
                                         <div class="kt-section kt-section--first">
-                                            <div class="kt-section__body">
-                                                <div class="form-group col-md-12">
-                                                    <label class="col-xl-3 col-lg-3 col-form-label">Category</label>
-                                                    <div class="col-lg-6 col-xl-6">
+                                            {{--<div class="kt-section__body">--}}
+                                                <div class="form-group col-md-6">
+                                                    {{--<label class="col-xl-3 col-lg-3 col-form-label">Category</label>--}}
+                                                    <div class="">
                                                         <input class="form-control" type="text" name="name" placeholder="Enter Category Name" required data-parsley-pattern="/^[a-zA-Z]*$/" data-parsley-required-message="Category is required" data-parsley-trigger="keyup">
                                                     </div><br>
-                                                    <div class="col-lg-6 col-xl-6">
-                                                    <select class="form-control" name="status" required>
-                                                        <option value="1">Active</option>
-                                                        <option value="0">Inactive</option>
-                                                    </select>
-                                                        </div>
+                                                    {{--<div class="col-lg-6 col-xl-6">--}}
+                                                    {{--<select class="form-control" name="status" required>--}}
+                                                        {{--<option value="1">Active</option>--}}
+                                                        {{--<option value="0">Inactive</option>--}}
+                                                    {{--</select>--}}
+                                                        {{--</div>--}}
                                                 </div>
-                                                <div class="form-group col-md-6">
+                                                <div class="form-group col-md-2">
                                                     <input type="submit" class="btn btn-brand btn-bold pull-right" value="Save" style="margin-left: 20px;">
-{{--                                                    <a href="{{ route('category.index') }}" type="button" class="btn btn-brand btn-bold pull-right">Back</a>--}}
+                                                    {{--<a href="{{ route('category.index') }}" type="button" class="btn btn-brand btn-bold pull-right">Back</a>--}}
                                                 </div>
-                                            </div>
+                                            {{--</div>--}}
                                         </div>
 
                                     </div>
@@ -90,18 +90,18 @@
                                 </form>
                                 <div class="search">
                                     <p>&nbsp;</p>
-                                    <div class="row">
-                                        <div class="col-lg-12 col-lg-offset-1">
+                                    {{--<div class="row">--}}
+                                        {{--<div class="col-lg-12">--}}
                                             <ul class="" id="page_list">
                                                 @foreach($category as $category)
                                                     <li class="row1" data-id="{{ $category->id }}">
                                                         <div class="li-post-group">
                                                             <h5 class="li-post-title">{{ $category->name }}</h5>
                                                         </div>
-                                                        <div class="li-post-group pull-right" style="margin-top: -30px;margin-left: 10px;">
+                                                        <!--div class="li-post-group pull-right" style="margin-top: -30px;margin-left: 10px;">
                                                             <?php $checked = ($category->status == 1) ? 'Active' : 'Inactive'; ?>
                                                             <p><strong>{{ $checked }}</strong></p>
-                                                        </div>
+                                                        </div-->
                                                         <div class="pull-right" style="margin-top: -30px;">
 
                                                             <form action="{{ route('category.destroy',$category->id) }}" method="POST">
@@ -113,37 +113,38 @@
                                                                 @csrf
                                                                 @method('DELETE')
 
-                                                                <button type="submit"  onclick="return confirm('Do you want to deleted product?')" class="btn btn-danger">Delete</button>
+                                                                {{--<button type="button" onclick="return confirm('Do you want to deleted product?')" class="btn btn-danger deletedBtn">Delete</button>--}}
+                                                                <button type="button" onclick="return confirm('Do you want to deleted product?')" class="btn btn-danger deletedBtn" data-id="{{ $category->id }}">Delete</button>
                                                             </form>
                                                         </div>
                                                     </li>
                                                 @endforeach
                                             </ul>
 
-                                        </div>
-                                    </div>
+                                        {{--</div>--}}
+                                    {{--</div>--}}
                                     <hr>
                                 </div>
 
-                                </div>
+                                {{--</div>--}}
                             {{--</div>--}}
 
 
 
                             <!--end::Form-->
-                        </div>
+                        {{--</div>--}}
 
                         <!--end::Portlet-->
 
-                    </div>
+                    {{--</div>--}}
                 </div>
 
-            </div>
+            {{--</div>--}}
             <!--end:: Tab Content-->
         {{--</div>--}}
-    </div>
+    {{--</div>--}}
 </div>
-
+    @endsection
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -167,6 +168,7 @@
                     position: index+1
                 });
             });
+//            console.log(order);
             $.ajax({
                 type: "POST",
                 dataType: "json",
@@ -187,10 +189,52 @@
         }
     });
 </script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+$(document).ready(function(){
+    $(".deletedBtn").click(function(){
+        var deleteId =  $(this).attr("data-id");
+//         alert(deleteId);
+
+                    var order = [];
+                    $('li.row1').each(function() {
+                         //  console.log($(this).attr('data-id'));
+                        order.push($(this).attr('data-id'));
+                    });
+        //console.log(order);
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: "{{route('update.sort')}}",
+                        data: {
+                            deleteId:deleteId,
+                            order:order,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.status == "success") {
+                                alert('Category deleted Successfully');
+                            } else {
+                                alert('Failed');
+                            }
+                        }
+                    });
+
+//                }
+//            });
+//        });
+});
+});
+</script>
 
 <script>
     setTimeout(function() {
         $('#alert').fadeOut('fast');
     }, 1500);
 </script>
-@extends('layouts.footer')
+
+
