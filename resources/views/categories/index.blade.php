@@ -42,6 +42,13 @@
     {{--<div class="kt-portlet__body">--}}
         {{--<div class="tab-content  kt-margin-t-20">--}}
             <!--Begin:: Tab Content-->
+        <div class="alert alert-success" role="alert" id="deleteAlert" style="display: none;">
+            <div class="alert-close">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true"><i class="la la-close"></i></span>
+                </button>
+            </div>
+        </div>
             @if (session()->has('success'))
                 <div class="alert alert-success" role="alert">
                     <div class="alert-text"><strong>
@@ -144,7 +151,9 @@
         {{--</div>--}}
     {{--</div>--}}
 </div>
-    @endsection
+@endsection
+
+@section('scripts')
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -198,43 +207,38 @@
 $(document).ready(function(){
     $(".deletedBtn").click(function(){
         var deleteId =  $(this).attr("data-id");
-//         alert(deleteId);
-
                     var order = [];
                     $('li.row1').each(function() {
-                         //  console.log($(this).attr('data-id'));
                         order.push($(this).attr('data-id'));
                     });
-        //console.log(order);
                     $.ajax({
                         type: "POST",
                         dataType: "json",
                         url: "{{route('update.sort')}}",
-                        data: {
-                            deleteId:deleteId,
-                            order:order,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            if (response.status == "success") {
-                                alert('Category deleted Successfully');
-                            } else {
-                                alert('Failed');
+                        data: {deleteId:deleteId, order:order, _token: '{{ csrf_token() }}'},
+                        success: function(data) {
+                            if(data.success == true){
+//                                alert(data.message);
+                                $("#deleteAlert").show();
+                                $("#deleteAlert").text(data.message);
+                                $("#deleteAlert").delay(2000).fadeOut("slow");
+//                                window.location.reload();
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 3000);
+                            }else{
+                                alert('Failed to deleted');
                             }
                         }
                     });
-
-//                }
-//            });
-//        });
 });
 });
 </script>
-
-<script>
-    setTimeout(function() {
-        $('#alert').fadeOut('fast');
-    }, 1500);
-</script>
+@endsection
+{{--<script>--}}
+    {{--setTimeout(function() {--}}
+        {{--$('#alert').fadeOut('fast');--}}
+    {{--}, 1500);--}}
+{{--</script>--}}
 
 

@@ -1,9 +1,6 @@
 @extends('layouts.master')
 
 @section('main-content')
-{{--@extends('layouts.sidebar')--}}
-
-{{--<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">--}}
     <!-- begin:: Subheader -->
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
         <div class="kt-container  kt-container--fluid ">
@@ -55,23 +52,23 @@
                             <div class="kt-portlet__body">
                                 <!--begin::Section-->
                                 <div class="kt-section">
-                                    <div class="kt-section__content">
-                                        <?php $checked = ($category->status == 1) ? 'Active' : 'Inactive'; ?>
+                                    {{--<div class="kt-section__content">--}}
+                                        <!--?php// $checked = ($category->status == 1) ? 'Active' : 'Inactive'; ?-->
                                         <table class="table">
                                             <thead>
                                             <tr>
                                                 <th>Name</th>
-                                                <th>Status</th>
+                                                {{--<th>Status</th>--}}
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
                                                 <td>{{ $category->name }}</td>
-                                                <td>{{ $checked }}</td>
+                                                {{--<td>{{ $checked }}</td>--}}
                                             </tr>
                                             </tbody>
                                         </table>
-                                    </div>
+                                    {{--</div>--}}
                                 </div>
 
                                 <!--end::Section-->

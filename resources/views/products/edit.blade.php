@@ -28,8 +28,6 @@
         color: black;
     }
 </style>
-{{--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>--}}
-{{--<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">--}}
     <!-- begin:: Subheader -->
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
         <div class="kt-container  kt-container--fluid ">
@@ -39,6 +37,9 @@
                 <span class="kt-subheader__separator kt-hidden"></span>
                 <div class="kt-subheader__breadcrumbs">
                     <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                    <span class="kt-subheader__breadcrumbs-separator"></span>
+                    <a href="{{route('product.index')}}" class="kt-subheader__breadcrumbs-link">
+                        Products </a>
                     <span class="kt-subheader__breadcrumbs-separator"></span>
                     <a href="" class="kt-subheader__breadcrumbs-link">
                         Edit product </a>
@@ -92,13 +93,14 @@
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 col-form-label">Category</label>
                                     <div class="col-lg-9 col-xl-6">
-                                            <select class="form-control" id="" name="category_id">
+                                            {{--<select class="form-control" id="" name="category_id">--}}
+                                                <select name="category_id" required="required" class="form-control">
+                                                    <option value="">--Select Category--</option>
                                                 @foreach($category as $category)
-                                                    <option value="{{ $category->id }}" {{ $category->id == $product->id ? 'selected="selected"' : '' }}> {{ $category->name }} </option>
-                                                    {{--<option value="{{ $category['name'] }}"  {{ $category['id'] == $product['id'] ? 'selected="selected"' : '' }}>{{ $category['name'] }}</option>--}}
+                                                    <option value="{{ $category->id }}" {{ $category->id == $product->category_id ? 'selected="selected"' : '' }}> {{ $category->name }} </option>
                                                 @endforeach
-                                            </select>
 
+                                            </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -113,17 +115,25 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
+                                <div class="form-group row" id="displayImg">
                                     <label class="col-xl-3 col-lg-3 col-form-label">Images</label>
                                     <div class="col-lg-9 col-xl-6">
-                                        <input class="form-control" type="file" name="files[]"  id="files" multiple="">
-                                        <br>
-                                     @foreach($productimage as $img)
-                                            <img src="/uploads/products/{{$img['images']}}" height="100px" width="100px" style="margin:10px;"/><button type="button" class="button-close" data-id="{{$img->id}}"><i class="fa fa-close"></i> close </button>
+                                        {{--<input class="form-control" type="file" name="files[]"  id="files" multiple="">--}}
+                                        {{--<br>--}}
+                                     {{--@foreach($productimage as $img)--}}
+                                            {{--<img src="/uploads/products/{{$img['images']}}" height="100px" width="100px" style="margin:10px;"/><button type="button" class="button-close" data-id="{{$img->id}}"><i class="fa fa-close"></i> Delete </button>--}}
+                                        {{--@endforeach--}}
+                                        <div id="filediv" class="row"><input name="file[]" type="file"  id="file"/></div><br>
+                                        <input type="button" id="add_more" class="btn btn-primary" value="Add More Files"/><br>
+                                        <input type="hidden" value="{{ count($product->image) }}" id="totalCount">
+                                        @foreach ($product->image as $img)
+                                            <img src="/uploads/products/{{ $img->images }}" height="100px" width="100px" style="margin:10px;"><button type="button" class="button-close" data-id="{{ $img->id }}"><i class="fa fa-close"></i> Delete </button>
                                         @endforeach
 
                                     </div>
                                 </div>
+
+
                                 <div class="form-group col-8">
                                     <input type="submit" class="btn btn-brand btn-bold pull-right" value="Save Changes" style="margin-left: 20px;">
                                     <a href="{{ route('product.index') }}" type="button" class="btn btn-brand btn-bold pull-right">Back</a>
@@ -142,8 +152,77 @@
 {{--</div>--}}
 <!--End:: Tab Content-->
 @endsection
-            @section('scripts')
-            <script src="{{asset('js/jquery1.12.js')}}"></script>
+@section('scripts')
+    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>--}}
+    <script src="{{ asset('js/multipleImg3.2.1.min.js' )}}"></script>
+    {{--<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>--}}
+    <script>
+        var abc = 0;
+        var fixCount = 4;
+        var count = fixCount - $("#totalCount").val();
+
+        $btn = $('input[type="button"]');
+        if(count < 0) {
+//            alert(count);
+            $("#add_more").hide();
+            $("#filediv").hide();
+        }
+        $("#add_more").click(function ()
+        {
+            count--;
+            $(this).before($("<div/>",{id: 'filediv'}).fadeIn('slow').append($("<input/>",
+                    {
+                        name: 'file[]',
+                        type: 'file',
+                        id: 'file'
+                    }),
+                    $("<br/><br/>")
+            ));
+            if(count < 0) {
+                //alert("if!!");
+                $("#add_more").hide();
+                $("#filediv").hide();
+                return !$btn.attr('disabled','disabled');
+            }else if(count == 0){
+            alert(count);
+//                alert("Total 5 selection completed!!");
+                $("#filediv").attr('disabled','disabled');
+                return !$btn.attr('disabled','disabled');
+        }
+
+        });
+        $('body').on('change', '#file', function ()
+        {
+            if (this.files && this.files[0])
+            {
+                abc += 1;
+                var z = abc - 1;
+                var x = $(this)
+                        .parent()
+                        .find('#previewimg' + z).remove();
+                $(this).before("<div id='abcd" + abc + "' class='abcd row'><img id='previewimg" + abc + "' src='' width='80px'; height='80px';/></div>");
+                var reader = new FileReader();
+                reader.onload = imageIsLoaded;
+                reader.readAsDataURL(this.files[0]);
+                $(this)
+                        .hide();
+                $("#abcd" + abc).append($("<img/>",{
+                    id: 'img',
+                    src: 'x.png', //the remove icon
+                    alt: 'delete'
+                }) .click(function ()
+                {
+                    $(this).parent().parent().remove();
+                }));
+            }
+        });
+        //image preview
+        function imageIsLoaded(e)
+        {  console.log(e);
+            $('#previewimg' + abc).attr('src', e.target.result);
+        };
+    </script>
+
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -151,50 +230,64 @@
         }
     });
 
-    $(".button-close").click(function(){
-        var closeId =  $(this).attr("data-id");
-      {{--alert("{{url('delete')}}/"+closeId);--}}
+    $(".button-close").click(function() {
+        var response = confirm("Do you want to delete this Image?");
+        if (response == true) {
+        var closeId = $(this).attr("data-id");
         $.ajax({
-            type:'get',
-            url: "{{url('delete_order')}}/"+closeId,
-            {{--data:{closeId:closeId ,_token: '{{ csrf_token() }}'},--}}
-            success:function(data){
-//                alert(data.success);
-                window.location.reload();
+            type: 'get',
+            url: "{{url('delete_order')}}/" + closeId,
+            data:{closeId:closeId ,_token: '{{ csrf_token() }}'},
+            success: function (data) {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert("Failed");
+                    window.location.reload();
+                }
             }
         });
-    });
-
-</script>
-
-{{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>--}}
-<script>
-    $(document).ready(function() {
-        if (window.File && window.FileList && window.FileReader) {
-            $("#files").on("change", function(e) {
-                var files = e.target.files,
-                        filesLength = files.length;
-                for (var i = 0; i < filesLength; i++) {
-                    var f = files[i]
-                    var fileReader = new FileReader();
-                    fileReader.onload = (function(e) {
-                        var file = e.target;
-                        $("<span class=\"pip\">" +
-                                "<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
-                                "<br/><span class=\"remove\">Remove image</span>" +
-                                "</span>").insertAfter("#files");
-                        $(".remove").click(function(){
-                            $(this).parent(".pip").remove();
-                        });
-
-                    });
-                    fileReader.readAsDataURL(f);
-                }
-            });
-        } else {
-            alert("Your browser doesn't support to File API")
+    }else{
+         alert("Failed to delete Image");
         }
     });
 </script>
+
+    {{--@section('scripts')--}}
+    {{--<script src="{{asset('js/jquery1.12.js')}}"></script>--}}
+{{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>--}}
+{{--<script>--}}
+    {{--$(document).ready(function() {--}}
+        {{--if (window.File && window.FileList && window.FileReader) {--}}
+            {{--$("#files").on("change", function(e) {--}}
+                {{--var files = e.target.files,--}}
+                        {{--filesLength = files.length;--}}
+                {{--if (filesLength > 5) {--}}
+                    {{--filesLength = event.target.value = '';--}}
+                    {{--alert("Maximum selection is 5");--}}
+                {{--} else{--}}
+                    {{--for (var i = 0; i < filesLength; i++) {--}}
+                        {{--var f = files[i]--}}
+                        {{--var fileReader = new FileReader();--}}
+                        {{--fileReader.onload = (function (e) {--}}
+                            {{--var file = e.target;--}}
+                            {{--$("<span class=\"pip\">" +--}}
+                                    {{--"<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +--}}
+                                    {{--"<br/><span class=\"remove\">Remove image</span>" +--}}
+                                    {{--"</span>").insertAfter("#files");--}}
+                            {{--$(".remove").click(function () {--}}
+                                {{--$(this).parent(".pip").remove();--}}
+                            {{--});--}}
+
+                        {{--});--}}
+                        {{--fileReader.readAsDataURL(f);--}}
+                    {{--}--}}
+            {{--}--}}
+            {{--});--}}
+        {{--} else {--}}
+            {{--alert("Your browser doesn't support to File API")--}}
+        {{--}--}}
+    {{--});--}}
+{{--</script>--}}
 
 @endsection

@@ -6,6 +6,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Symfony\Component\HttpFoundation\Request;
+use Session;
 
 class LoginController extends Controller
 {
@@ -36,7 +37,8 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('guest')->except('logout');
+//        $this->middleware('guest')->except('logout');
+//        $this->middleware('Admin');
     }
 
     public function showLoginForm()
@@ -62,7 +64,7 @@ class LoginController extends Controller
 
     public function logout(Request $request){
         \Auth::logout();
-//        session::flash();
+        session::flush();
         return redirect('/')->with('success','Successfully Logged Out!!');
     }
 }

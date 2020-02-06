@@ -1,31 +1,6 @@
 @extends('layouts.master')
 
 @section('main-content')
-
-<meta name="csrf-token" content="{{ csrf_token() }}">
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
-
-<style>
-    #page_list li
-    {
-        padding:16px;
-        background-color:#f9f9f9;
-        border:1px dotted #ccc;
-        cursor:move;
-        margin-top:12px;
-    }
-    #page_list li.ui-state-highlight
-    {
-        padding:24px;
-        background-color:#ffffcc;
-        border:1px dotted #ccc;
-        cursor:move;
-        margin-top:12px;
-    }
-</style>
-{{--<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">--}}
     <!-- begin:: Subheader -->
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
         <div class="kt-container  kt-container--fluid ">

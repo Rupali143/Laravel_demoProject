@@ -169,8 +169,12 @@ class CategoryController extends Controller
         $displayOrder = array_values($displayOrder);
         foreach ($displayOrder as $order => $catId) {
             Category::whereId($catId)->update(['categoryOrderby' => $order]);
-
-            return redirect()->route('category.index')->with('success', 'Category deleted Successfully');
+            $data = [
+                'success' => true,
+                'message'=> 'Category deleted Successfully'
+            ] ;
+            return response()->json($data);
+//            return redirect()->route('category.index')->with('success', 'Category deleted Successfully');
 //        return response('Update Successfully.', 200);
         }
     }

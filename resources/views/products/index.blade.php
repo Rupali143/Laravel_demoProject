@@ -1,4 +1,4 @@
-{{--@extends('layouts.header')--}}
+
 @extends('layouts.master')
 
 @section('main-content')
@@ -11,15 +11,12 @@
                 <span class="kt-subheader__separator kt-hidden"></span>
                 <div class="kt-subheader__breadcrumbs">
                     <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
-
                 </div>
             </div>
         </div>
     </div>
     <!-- end:: Subheader -->
-<div class="kt-portlet__body">
-    {{--<div class="tab-content  kt-margin-t-20">--}}
-        <!--Begin:: Tab Content-->
+    <div class="kt-portlet__body">
         @if (session()->has('success'))
             <div class="alert alert-success fade show" role="alert">
                 <div class="alert-text"><strong>
@@ -32,9 +29,6 @@
                 </div>
             </div>
         @endif
-        {{--<div class="tab-pane active" id="kt_apps_contacts_view_tab_2" role="tabpanel">--}}
-            {{--<div class="row">--}}
-                {{--<div class="col-xl-6">--}}
                     <!--begin::Portlet-->
                     <div class="kt-portlet">
                         <div class="kt-portlet__head">
@@ -57,7 +51,7 @@
                                             <div class="row">
                                             <div class="form-group col-md-3">
                                                 <label></label>
-                                                <input type="text" class="form-control" placeholder="Enter name" name="name">
+                                                <input type="text" class="form-control" placeholder="Enter name" name="name" value="{{$request->name}}">
                                             </div>
                                             <div class="form-group col-md-3">
                                                 {{--<label></label>--}}
@@ -147,11 +141,11 @@
 
             {!! $products->links() !!}
 
-        {{--</div>--}}
+        </div>
         <!--end:: Tab Content-->
     {{--</div>--}}
-</div>
-
+{{--</div>--}}
+{{--</div>--}}
 @endsection
 <script>
     setTimeout(function() {

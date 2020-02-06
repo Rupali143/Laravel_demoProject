@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Eloquent\Model\Product;
 use App\Eloquent\Model\Category;
-use App\Eloquent\Model\Productimage;
+use App\Eloquent\Model\Product_image;
 
 use Illuminate\Support\Facades\Redirect;
 //use App\Http\Controllers\DB;
@@ -24,7 +24,7 @@ class ProductController extends Controller
             $products = new Product();
 
             if (isset($request->name)) {
-                $products = $products->where('name', $request->input('name'));
+                $products = $products->where('name','LIKE', '%'.$request->input('name').'%');
             }
             if (isset($request->status)) {
                 $products = $products->where('status', $request->input('status'));
@@ -65,7 +65,7 @@ class ProductController extends Controller
             'name' => 'required',
             'category_id' => 'required',
             'status' => 'required',
-            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+//            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $product = new Product();
@@ -76,17 +76,22 @@ class ProductController extends Controller
 
         $lastId = $product->id;
 
-        if ($files = $request->file('files')) {
+        if ($files = $request->file('file')) {
             $destinationPath = public_path('uploads/products/');
             if(!is_dir('uploads/products')) {
                 mkdir('uploads/products', 0755, true);
             }
+//            echo'<pre>';print_r($files);exit;
+            $i = 1;
             foreach ($files as $img) {
-               $image = $img->getClientOriginalName();
-                $img->move($destinationPath, $image);
-                $productImage = new Productimage();
+                $extension = $img->getClientOriginalExtension();
+                $image = $img->getClientOriginalName();
+                $name = explode('.', $image)[0].'_'.$lastId.'_'. $i++ .'.'. $extension;
+//                echo'<pre>';print_r($image);exit;
+                $img->move($destinationPath, $name);
+                $productImage = new Product_image();
                 $productImage->product_id = $lastId;
-                $productImage->images = $image;
+                $productImage->images = $name;
                 $productImage->save();
             }
         }
@@ -104,6 +109,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
+//        $productimage = Product_image::where('product_id',$id)->get();
         return view('products.show',compact('product'));
     }
 
@@ -117,9 +123,8 @@ class ProductController extends Controller
     {
         $category = Category::all();
         $product = Product::find($id);
-        $productimage = Productimage::where('product_id',$id)->get();
-//               dd($productimage);exit;
-        return view('products.edit',compact('product','category','productimage'));
+//        $productimage = Product_image::where('product_id',$id)->get();
+        return view('products.edit',compact('product','category'));
     }
 
     /**
@@ -136,32 +141,32 @@ class ProductController extends Controller
             'name' => 'required',
             'category_id' => 'required',
             'status'  => 'required',
-            //'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-        $validate1 =$request->validate([
-            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
+//        $validate1 =$request->validate([
+//            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+//        ]);
         Product::whereId($id)->update($validate);
 
-        if ($files = $request->file('files')) {
+        if ($files = $request->file('file')) {
             $destinationPath = public_path('uploads/products/');
-//            dd($destinationPath);
+
             if(!is_dir('uploads/products')) {
                 mkdir('uploads/products', 0755, true);
             }
+            $i=0;
             foreach ($files as $img) {
+                $extension =$img->getClientOriginalExtension();
                 $image = $img->getClientOriginalName();
-                $img->move($destinationPath, $image);
-                $productImage = new Productimage();
+
+                $name =explode('.',$image)[0].'_'.$id.'_'. $i++ .'.'.$extension;
+                $img->move($destinationPath, $name);
+                $productImage = new Product_image();
                 $productImage->product_id = $id;
-                $productImage->images = $image;
+                $productImage->images = $name;
                 $productImage->save();
             }
 
         }
-//        dd($image);
-
         return redirect()->route('product.index')
             ->with('success','Product updated successfully');
     }
@@ -178,15 +183,17 @@ class ProductController extends Controller
         return redirect()->route('product.index')->with('success','Product deleted Successfully');
     }
 
-//    public function destroy(Product $product)
-//    {
-//        $product->delete();
-//        return redirect()->route('product.index')->with('success','Product deleted Successfully');
-//    }
 
     public function deleteorder($id)
     {
-        $image = Productimage::find($id)->delete();
-        return redirect()->route('product.edit',$id)->with('success','image deleted Successfully');
+//        dd(12);
+        $image = Product_image::find($id)->delete();
+//        dd($image);
+        $data = [
+            'success' => true,
+            'message'=> 'Image deleted Successfully'
+        ] ;
+        return response()->json($data);
+        //return redirect()->route('product.edit',$id)->with('success','image deleted Successfully');
     }
 }

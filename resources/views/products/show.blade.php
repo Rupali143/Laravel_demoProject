@@ -1,9 +1,6 @@
 @extends('layouts.master')
 
 @section('main-content')
-
-
-{{--<div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">--}}
     <!-- begin:: Subheader -->
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
         <div class="kt-container  kt-container--fluid ">
@@ -25,7 +22,6 @@
     </div>
     <!-- end:: Subheader -->
     <div class="kt-portlet__body">
-        {{--<div class="tab-content  kt-margin-t-20">--}}
             <!--Begin:: Tab Content-->
             @if (session()->has('success'))
                 <div class="alert alert-success fade show" role="alert">
@@ -63,6 +59,7 @@
                                                 <th>Name</th>
                                                 <th>Category</th>
                                                 <th>Status</th>
+                                                <th>Images</th>
                                              </tr>
                                             </thead>
                                             <tbody>
@@ -71,6 +68,16 @@
                                                     <td>{{ $product->name }}</td>
                                                     <td>{{ $product->cat->name }}</td>
                                                     <td>{{ $checked }}</td>
+                                                  {{--<td>--}}
+                                                      {{--@foreach($productimage as $img)--}}
+                                                          {{--<img src="/uploads/products/{{$img['images']}}" height="50px" width="50px" style="margin:10px;"/>--}}
+                                                      {{--@endforeach--}}
+                                                  {{--</td>--}}
+                                                  <td>
+                                                      @foreach ($product->image as $img)
+                                                      <img src="/uploads/products/{{ $img->images }}" height="50px" width="50px" style="margin:10px;">
+                                                  @endforeach
+                                                  </td>
                                                 </tr>
                                            </tbody>
                                         </table>
