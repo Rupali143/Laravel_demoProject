@@ -186,7 +186,6 @@ class ProductController extends Controller
 
     public function deleteorder($id)
     {
-//        dd(12);
         $image = Product_image::find($id)->delete();
 //        dd($image);
         $data = [
@@ -194,6 +193,5 @@ class ProductController extends Controller
             'message'=> 'Image deleted Successfully'
         ] ;
         return response()->json($data);
-        //return redirect()->route('product.edit',$id)->with('success','image deleted Successfully');
     }
 }

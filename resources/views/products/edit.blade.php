@@ -123,8 +123,8 @@
                                      {{--@foreach($productimage as $img)--}}
                                             {{--<img src="/uploads/products/{{$img['images']}}" height="100px" width="100px" style="margin:10px;"/><button type="button" class="button-close" data-id="{{$img->id}}"><i class="fa fa-close"></i> Delete </button>--}}
                                         {{--@endforeach--}}
-                                        <div id="filediv" class="row"><input name="file[]" type="file"  id="file"/></div><br>
-                                        <input type="button" id="add_more" class="btn btn-primary" value="Add More Files"/><br>
+                                        <div id="filediv" class="row"><input name="file[]" type="file"  id="file" style="display: none;"/></div><br>
+                                        <input type="button" id="add_more" class="btn btn-primary add_more" value="Add More Files" style="display: none;"/><br>
                                         <input type="hidden" value="{{ count($product->image) }}" id="totalCount">
                                         @foreach ($product->image as $img)
                                             <img src="/uploads/products/{{ $img->images }}" height="100px" width="100px" style="margin:10px;"><button type="button" class="button-close" data-id="{{ $img->id }}"><i class="fa fa-close"></i> Delete </button>
@@ -162,10 +162,15 @@
         var count = fixCount - $("#totalCount").val();
 
         $btn = $('input[type="button"]');
+
         if(count < 0) {
 //            alert(count);
             $("#add_more").hide();
             $("#filediv").hide();
+        }
+        else{
+            $("#add_more").show();
+            $("#filediv").show();
         }
         $("#add_more").click(function ()
         {
@@ -179,16 +184,14 @@
                     $("<br/><br/>")
             ));
             if(count < 0) {
-                //alert("if!!");
                 $("#add_more").hide();
                 $("#filediv").hide();
                 return !$btn.attr('disabled','disabled');
-            }else if(count == 0){
-            alert(count);
-//                alert("Total 5 selection completed!!");
-                $("#filediv").attr('disabled','disabled');
-                return !$btn.attr('disabled','disabled');
-        }
+            }
+//            else if(count == 0){
+//                $("#filediv").attr('disabled','disabled');
+//                return !$btn.attr('disabled','disabled');
+//        }
 
         });
         $('body').on('change', '#file', function ()
