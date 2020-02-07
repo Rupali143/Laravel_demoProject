@@ -123,6 +123,7 @@
                                      {{--@foreach($productimage as $img)--}}
                                             {{--<img src="/uploads/products/{{$img['images']}}" height="100px" width="100px" style="margin:10px;"/><button type="button" class="button-close" data-id="{{$img->id}}"><i class="fa fa-close"></i> Delete </button>--}}
                                         {{--@endforeach--}}
+
                                         <div id="filediv" class="row"><input name="file[]" type="file"  id="file" style="display: none;"/></div><br>
                                         <input type="button" id="add_more" class="btn btn-primary add_more" value="Add More Files" style="display: none;"/><br>
                                         <input type="hidden" value="{{ count($product->image) }}" id="totalCount">
@@ -153,9 +154,7 @@
 <!--End:: Tab Content-->
 @endsection
 @section('scripts')
-    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>--}}
     <script src="{{ asset('js/multipleImg3.2.1.min.js' )}}"></script>
-    {{--<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>--}}
     <script>
         var abc = 0;
         var fixCount = 4;
@@ -164,7 +163,6 @@
         $btn = $('input[type="button"]');
 
         if(count < 0) {
-//            alert(count);
             $("#add_more").hide();
             $("#filediv").hide();
         }
@@ -200,21 +198,25 @@
             {
                 abc += 1;
                 var z = abc - 1;
-                var x = $(this)
-                        .parent()
-                        .find('#previewimg' + z).remove();
+                var x = $(this).parent().find('#previewimg' + z).remove();
+
                 $(this).before("<div id='abcd" + abc + "' class='abcd row'><img id='previewimg" + abc + "' src='' width='80px'; height='80px';/></div>");
                 var reader = new FileReader();
                 reader.onload = imageIsLoaded;
                 reader.readAsDataURL(this.files[0]);
-                $(this)
-                        .hide();
+                $(this).hide();
                 $("#abcd" + abc).append($("<img/>",{
                     id: 'img',
                     src: 'x.png', //the remove icon
                     alt: 'delete'
-                }) .click(function ()
+                }).click(function ()
                 {
+//                    alert(count);
+//                    $("#filediv").show();
+                    $("#add_more").show();
+                    $("#filediv").prop("disabled",false);
+//                    $("#filediv").prop("disabled", false);
+                    $("#add_more").prop("disabled", false);
                     $(this).parent().parent().remove();
                 }));
             }
@@ -255,42 +257,4 @@
         }
     });
 </script>
-
-    {{--@section('scripts')--}}
-    {{--<script src="{{asset('js/jquery1.12.js')}}"></script>--}}
-{{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>--}}
-{{--<script>--}}
-    {{--$(document).ready(function() {--}}
-        {{--if (window.File && window.FileList && window.FileReader) {--}}
-            {{--$("#files").on("change", function(e) {--}}
-                {{--var files = e.target.files,--}}
-                        {{--filesLength = files.length;--}}
-                {{--if (filesLength > 5) {--}}
-                    {{--filesLength = event.target.value = '';--}}
-                    {{--alert("Maximum selection is 5");--}}
-                {{--} else{--}}
-                    {{--for (var i = 0; i < filesLength; i++) {--}}
-                        {{--var f = files[i]--}}
-                        {{--var fileReader = new FileReader();--}}
-                        {{--fileReader.onload = (function (e) {--}}
-                            {{--var file = e.target;--}}
-                            {{--$("<span class=\"pip\">" +--}}
-                                    {{--"<img class=\"imageThumb\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +--}}
-                                    {{--"<br/><span class=\"remove\">Remove image</span>" +--}}
-                                    {{--"</span>").insertAfter("#files");--}}
-                            {{--$(".remove").click(function () {--}}
-                                {{--$(this).parent(".pip").remove();--}}
-                            {{--});--}}
-
-                        {{--});--}}
-                        {{--fileReader.readAsDataURL(f);--}}
-                    {{--}--}}
-            {{--}--}}
-            {{--});--}}
-        {{--} else {--}}
-            {{--alert("Your browser doesn't support to File API")--}}
-        {{--}--}}
-    {{--});--}}
-{{--</script>--}}
-
 @endsection

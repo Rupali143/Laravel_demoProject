@@ -178,4 +178,14 @@ class CategoryController extends Controller
 //        return response('Update Successfully.', 200);
         }
     }
+
+    public function changeStatusCat(Request $request)
+    {
+//        dd($request->all());
+        $category = Category::find($request->id);
+        $category->status = $request->status;
+        $category->save();
+//        Product::whereId($request->id)->update($product);
+        return response()->json(['success'=>'Status change successfully.']);
+    }
 }

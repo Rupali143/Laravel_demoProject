@@ -194,4 +194,14 @@ class ProductController extends Controller
         ] ;
         return response()->json($data);
     }
+
+    public function changeStatus(Request $request)
+    {
+//        dd($request->all());
+        $product = Product::find($request->id);
+        $product->status = $request->status;
+        $product->save();
+//        Product::whereId($request->id)->update($product);
+        return response()->json(['success'=>'Status change successfully.']);
+    }
 }

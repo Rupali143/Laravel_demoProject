@@ -4,7 +4,8 @@
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"  />
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <style>
     #page_list li
     {
@@ -109,10 +110,11 @@
                                                             <?php $checked = ($category->status == 1) ? 'Active' : 'Inactive'; ?>
                                                             <p><strong>{{ $checked }}</strong></p>
                                                         </div-->
+                                                        {{--<input data-id="{{$category->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $category->status ? 'checked' : '' }}>--}}
                                                         <div class="pull-right" style="margin-top: -30px;">
 
                                                             <form action="{{ route('category.destroy',$category->id) }}" method="POST">
-
+                                                                <input data-id="{{$category->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $category->status ? 'checked' : '' }}>
                                                                 <a class="btn btn-info" href="{{ route('category.show', $category->id) }}">View</a>
 
                                                                 <a class="btn btn-primary" href="{{ route('category.edit', $category->id) }}"><i class="fa fa-edit"></i>Edit</a>
@@ -133,27 +135,35 @@
                                     <hr>
                                 </div>
 
-                                {{--</div>--}}
-                            {{--</div>--}}
-
-
-
-                            <!--end::Form-->
-                        {{--</div>--}}
-
-                        <!--end::Portlet-->
-
-                    {{--</div>--}}
                 </div>
 
-            {{--</div>--}}
-            <!--end:: Tab Content-->
-        {{--</div>--}}
-    {{--</div>--}}
 </div>
 @endsection
 
 @section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script>
+        $(document).ready(function(){
+//            $.noConflict();
+            $(".toggle-class").change(function() {
+                var status = $(this).prop('checked') == true ? 1 : 0;
+                var id = $(this).data('id');
+
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: "{{ url('changeStatusCat') }}",
+                    data: {'status': status, 'id': id},
+                    success: function(data){
+//                    alert(data.success)
+                    }
+                });
+            });
+
+        });
+    </script>
+
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -161,6 +171,7 @@
         }
     });
     $(function () {
+        $.noConflict();
         $( "#page_list" ).sortable({
             items: "li",
             cursor: 'move',
@@ -235,10 +246,5 @@ $(document).ready(function(){
 });
 </script>
 @endsection
-{{--<script>--}}
-    {{--setTimeout(function() {--}}
-        {{--$('#alert').fadeOut('fast');--}}
-    {{--}, 1500);--}}
-{{--</script>--}}
 
 

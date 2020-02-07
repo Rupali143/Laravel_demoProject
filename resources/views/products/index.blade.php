@@ -1,6 +1,7 @@
 
 @extends('layouts.master')
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"  />
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 @section('main-content')
     <!-- begin:: Subheader -->
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
@@ -107,7 +108,12 @@
                                                 {{--<td> {{ ++$i }}</td>--}}
                                                 <td>{{ $product->name }}</td>
                                                 <td> {{$product->cat ? $product->cat->name : '-'}}</td>
-                                                <td>{{ $checked }}</td>
+                                                <td>
+{{--                                                    {{ $checked }}--}}
+
+                                                    <input data-id="{{$product->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $product->status ? 'checked' : '' }}>
+                                                    {{--<input type="button" data-id="{{ $product->id }}" data-toggle="toggle" {{ $product->status ? 'checked' : '' }}>--}}
+                                               </td>
                                                 <td>
                                                     <form action="{{ route('product.destroy',$product->id) }}" method="POST">
 
@@ -147,9 +153,30 @@
 {{--</div>--}}
 {{--</div>--}}
 @endsection
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $.noConflict();
+        $(".toggle-class").change(function() {
+            var status = $(this).prop('checked') == true ? 1 : 0;
+            var id = $(this).data('id');
+
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "{{ url('changeStatus') }}",
+                data: {'status': status, 'id': id},
+                success: function(data){
+//                    alert(data.success)
+                }
+            });
+        });
+
+    });
+    </script>
 <script>
     setTimeout(function() {
         $('#alert').fadeOut('fast');
     }, 1500);
 </script>
-@extends('layouts.footer')

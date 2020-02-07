@@ -41,3 +41,9 @@ Route::get('delete_order/{id}', 'ProductController@deleteorder')->name('delete.o
 //Route::get('delete','ProductController@delete');
 
 Route::post('updateSort','CategoryController@updateSort')->name('update.sort');
+
+//Route::get('changeStatus','ProductController@changeStatus')->name('change.status');
+
+Route::get('changeStatus', 'ProductController@changeStatus');
+
+Route::get('changeStatusCat', 'CategoryController@changeStatusCat');
