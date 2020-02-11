@@ -39,10 +39,6 @@
             </div>
         </div>
     </div>
-    <!-- end:: Subheader -->
-    {{--<div class="kt-portlet__body">--}}
-        {{--<div class="tab-content  kt-margin-t-20">--}}
-            <!--Begin:: Tab Content-->
         <div class="alert alert-success" role="alert" id="deleteAlert" style="display: none;">
             <div class="alert-close">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -79,12 +75,6 @@
                                                     <div class="">
                                                         <input class="form-control" type="text" name="name" placeholder="Enter Category Name" required data-parsley-pattern="/^[a-zA-Z]*$/" data-parsley-required-message="Category is required" data-parsley-trigger="keyup">
                                                     </div><br>
-                                                    {{--<div class="col-lg-6 col-xl-6">--}}
-                                                    {{--<select class="form-control" name="status" required>--}}
-                                                        {{--<option value="1">Active</option>--}}
-                                                        {{--<option value="0">Inactive</option>--}}
-                                                    {{--</select>--}}
-                                                        {{--</div>--}}
                                                 </div>
                                                 <div class="form-group col-md-2">
                                                     <input type="submit" class="btn btn-brand btn-bold pull-right" value="Save" style="margin-left: 20px;">

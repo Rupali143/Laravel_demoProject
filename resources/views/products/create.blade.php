@@ -117,8 +117,8 @@
                             <div class="form-group row">
                                 <label class="col-xl-3 col-lg-3 col-form-label">Image</label>
                                 <div class="col-lg-9 col-xl-6">
-                                <div id="filediv" class="row filediv"><input name="file[]" type="file"  id="file"/></div><br>
-                                <input type="button" id="add_more" class="btn btn-primary" value="Add More Files"/><br>
+                                <div id="filediv" class="row filediv"><input name="file[]" type="file"  id="file" style="display: none;"/></div><br>
+                                <input type="button" id="add_more" class="btn btn-primary" value="Add More Files" style="display: none;"/><br>
                                 </div>
                             </div>
                                 {{--<input type="file" id="files" name="files[]" multiple />--}}
@@ -146,10 +146,22 @@
 <script>
     var abc = 0;
     var count = 0;
+
     $btn = $('input[type="button"]');
+
+    if(count < 0) {
+        $("#add_more").hide();
+        $("#filediv").hide();
+    }
+    else{
+        $("#add_more").show();
+        $("#filediv").show();
+    }
+
 
     $("#add_more").click(function ()
     {
+
         count++;
         $(this).before($("<div/>",{id: 'filediv'}).fadeIn('slow').append($("<input/>",
                 {
@@ -159,7 +171,7 @@
                 }),
                 $("<br/><br/>")
         ));
-        if(count == 4) {
+        if(count == 5) {
             alert("Maximum 5 selection");
             return !$btn.attr('disabled','disabled');
         }
@@ -168,6 +180,9 @@
 
     $('body').on('change', '#file', function ()
     {
+//        $fileCount = this.files.length;
+//       alert($fileCount);
+
         if (this.files && this.files[0])
         {
             abc += 1;
@@ -185,7 +200,13 @@
                 src: 'x.png',
                 alt: 'delete'
             }) .click(function ()
-            { $(this).parent().parent().remove();
+            {
+//                if(count < 5) { alert(count);
+//                    $("#add_more").show();
+//                    $("#filediv").show();
+////                    return !$btn.attr('disabled','disabled');
+//                }
+                $(this).parent().parent().remove();
             }));
         }
     });

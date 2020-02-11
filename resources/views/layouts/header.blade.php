@@ -73,9 +73,9 @@
                 <span class="kt-header__topbar-welcome kt-hidden-mobile">Hi,</span>
                 @if(isset(Auth::user()->email)) {{Auth::user()->name }}
                 @endif
-                {{--<img class="kt-hidden" alt="Pic" src="assets/media/users/300_25.jpg" />--}}
+                {{--<img class="kt-hidden" alt="Pic" src="assets/media/frontEnd/300_25.jpg" />--}}
 
-                <!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
+                <!--use below badge element instead the frontEnd avatar to display username's first letter(remove kt-hidden class to display it) -->
                 <span class="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold">S</span>
             </div>
         </div>
@@ -86,7 +86,7 @@
                 <div class="kt-user-card__avatar">
                     <img class="kt-hidden" alt="Pic" src="assets/media/users/300_25.jpg" />
 
-                    <!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
+                    <!--use below badge element instead the frontEnd avatar to display username's first letter(remove kt-hidden class to display it) -->
                     <span class="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-success">S</span>
                 </div>
                 <div class="kt-user-card__name">

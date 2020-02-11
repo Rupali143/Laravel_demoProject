@@ -31,7 +31,7 @@ var KTAppChat = function () {
 			height: function() {  // calculate height
 				var height;
 				var portletBodyEl = KTUtil.find(chatAsideEl, '.kt-portlet > .kt-portlet__body');
-				var widgetEl = KTUtil.find(chatAsideEl, '.kt-widget.kt-widget--users');
+				var widgetEl = KTUtil.find(chatAsideEl, '.kt-widget.kt-widget--frontEnd');
 				var searchbarEl = KTUtil.find(chatAsideEl, '.kt-searchbar');
 
 				if (KTUtil.isInResponsiveRange('desktop')) {

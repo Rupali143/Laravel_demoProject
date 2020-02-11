@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Symfony\Component\HttpFoundation\Request;
 use Session;
+use App\Http\Middleware\Admin;
 
 class LoginController extends Controller
 {
@@ -15,7 +16,7 @@ class LoginController extends Controller
     | Login Controller
     |--------------------------------------------------------------------------
     |
-    | This controller handles authenticating users for the application and
+    | This controller handles authenticating frontEnd for the application and
     | redirecting them to your home screen. The controller uses a trait
     | to conveniently provide its functionality to your applications.
     |
@@ -24,11 +25,12 @@ class LoginController extends Controller
 //    use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
+     * Where to redirect frontEnd after login.
      *
      * @var string
      */
     protected $redirectTo = '/home';
+
 
     /**
      * Create a new controller instance.
@@ -38,7 +40,7 @@ class LoginController extends Controller
     public function __construct()
     {
 //        $this->middleware('guest')->except('logout');
-//        $this->middleware('Admin');
+//        $this->middleware('admin');
     }
 
     public function showLoginForm()

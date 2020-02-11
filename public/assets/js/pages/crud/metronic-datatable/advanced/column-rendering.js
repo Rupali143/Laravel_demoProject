@@ -59,7 +59,7 @@ var KTDatatableColumnRenderingDemo = function() {
 						if (number > 8) {
 							output = '<div class="kt-user-card-v2">\
 								<div class="kt-user-card-v2__pic">\
-									<img src="assets/media/users/' + user_img + '" alt="photo">\
+									<img src="assets/media/frontEnd/' + user_img + '" alt="photo">\
 								</div>\
 								<div class="kt-user-card-v2__details">\
 									<span class="kt-user-card-v2__name">' + data.CompanyAgent + '</span>\

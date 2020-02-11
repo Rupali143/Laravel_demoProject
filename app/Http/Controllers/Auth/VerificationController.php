@@ -13,15 +13,15 @@ class VerificationController extends Controller
     |--------------------------------------------------------------------------
     |
     | This controller is responsible for handling email verification for any
-    | user that recently registered with the application. Emails may also
-    | be re-sent if the user didn't receive the original email message.
+    | frontEnd that recently registered with the application. Emails may also
+    | be re-sent if the frontEnd didn't receive the original email message.
     |
     */
 
     use VerifiesEmails;
 
     /**
-     * Where to redirect users after verification.
+     * Where to redirect frontEnd after verification.
      *
      * @var string
      */

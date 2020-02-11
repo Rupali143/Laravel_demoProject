@@ -1,19 +1,34 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Front;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class UserController extends Controller
+use App\Eloquent\Model\Product;
+use App\Eloquent\Model\Product_image;
+use App\Eloquent\Model\Category;
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('users.dashboard');
+
+        if (isset($request->id)) {
+//            $fetchproduct = Product::where('category_id',$request->id)->get();
+            $product = Product::with('image')->where('category_id',$request->id)->get();
+//            dd($product);
+            $category = Category::all();
+            return view('frontEnd/index', compact('product', 'category'));
+        }else {
+            $product = Product::with('image')->get();
+            $category = Category::all();
+            return view('frontEnd/index', compact('product', 'category'));
+        }
     }
 
     /**

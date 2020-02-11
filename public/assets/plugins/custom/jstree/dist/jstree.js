@@ -7889,7 +7889,7 @@
 		 */
 		filter	: false,
 		/**
-		 * Should loaded nodes be restored (setting this to true means that it is possible that the whole tree will be loaded for some users - use with caution). Defaults to `false`
+		 * Should loaded nodes be restored (setting this to true means that it is possible that the whole tree will be loaded for some frontEnd - use with caution). Defaults to `false`
 		 * @name $.jstree.defaults.state.preserve_loaded
 		 * @plugin state
 		 */

@@ -8,8 +8,7 @@ use App\Eloquent\Model\Category;
 use App\Eloquent\Model\Product_image;
 
 use Illuminate\Support\Facades\Redirect;
-//use App\Http\Controllers\DB;
-//use Illuminate\Database\Query\Builder;
+
 
 class ProductController extends Controller
 {

@@ -40,7 +40,7 @@ var KTPortletTools = function () {
         portlet.on('beforeRemove', function(portlet) {
             toastr.info('Before remove event fired!');
 
-            return confirm('Are you sure to remove this portlet ?');  // remove portlet after user confirmation
+            return confirm('Are you sure to remove this portlet ?');  // remove portlet after frontEnd confirmation
         });
 
         portlet.on('afterRemove', function(portlet) {
@@ -128,7 +128,7 @@ var KTPortletTools = function () {
         portlet.on('beforeRemove', function(portlet) {
             toastr.info('Before remove event fired!');
 
-            return confirm('Are you sure to remove this portlet ?');  // remove portlet after user confirmation
+            return confirm('Are you sure to remove this portlet ?');  // remove portlet after frontEnd confirmation
         });
 
         portlet.on('afterRemove', function(portlet) {
@@ -191,7 +191,7 @@ var KTPortletTools = function () {
         portlet.on('beforeRemove', function(portlet) {
             toastr.info('Before remove event fired!');
 
-            return confirm('Are you sure to remove this portlet ?');  // remove portlet after user confirmation
+            return confirm('Are you sure to remove this portlet ?');  // remove portlet after frontEnd confirmation
         });
 
         portlet.on('afterRemove', function(portlet) {
@@ -277,7 +277,7 @@ var KTPortletTools = function () {
         portlet.on('beforeRemove', function(portlet) {
             toastr.info('Before remove event fired!');
 
-            return confirm('Are you sure to remove this portlet ?');  // remove portlet after user confirmation
+            return confirm('Are you sure to remove this portlet ?');  // remove portlet after frontEnd confirmation
         });
 
         portlet.on('afterRemove', function(portlet) {
@@ -363,7 +363,7 @@ var KTPortletTools = function () {
         portlet.on('beforeRemove', function(portlet) {
             toastr.info('Before remove event fired!');
 
-            return confirm('Are you sure to remove this portlet ?');  // remove portlet after user confirmation
+            return confirm('Are you sure to remove this portlet ?');  // remove portlet after frontEnd confirmation
         });
 
         portlet.on('afterRemove', function(portlet) {
@@ -433,7 +433,7 @@ var KTPortletTools = function () {
         portlet.on('beforeRemove', function(portlet) {
             toastr.info('Before remove event fired!');
 
-            return confirm('Are you sure to remove this portlet ?');  // remove portlet after user confirmation
+            return confirm('Are you sure to remove this portlet ?');  // remove portlet after frontEnd confirmation
         });
 
         portlet.on('afterRemove', function(portlet) {

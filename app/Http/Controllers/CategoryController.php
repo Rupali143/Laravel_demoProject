@@ -133,8 +133,6 @@ class CategoryController extends Controller
             //$category1 = Category::find($id)->delete();
         }
             return redirect()->route('category.index')->with('success','Category deleted Successfully');
-//        }
-//        return redirect()->route('category.index')->with('success','Category deleted Successfully');
     }
 
     public function updateOrderId($orderValue){

@@ -8952,7 +8952,7 @@ var KTChat = function () {
 					'<span class="kt-chat__datetime">Just now</span>' +
 					'<a href="#" class="kt-chat__username">Jason Muller</span></a>' +
 					'<span class="kt-media kt-media--circle kt-media--sm">' +
-						'<img src="./assets/media/users/100_12.jpg" alt="image">'  +
+						'<img src="./assets/media/frontEnd/100_12.jpg" alt="image">'  +
 					'</span>' +
 				'</div>' +
 				'<div class="kt-chat__text kt-bg-light-brand">' +
@@ -8976,7 +8976,7 @@ var KTChat = function () {
 				var html =
 					'<div class="kt-chat__user">' +
 						'<span class="kt-media kt-media--circle kt-media--sm">' +
-							'<img src="./assets/media/users/100_13.jpg" alt="image">'  +
+							'<img src="./assets/media/frontEnd/100_13.jpg" alt="image">'  +
 						'</span>' +
 						'<a href="#" class="kt-chat__username">Max Born</span></a>' +
 						'<span class="kt-chat__datetime">Just now</span>' +
