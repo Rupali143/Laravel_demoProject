@@ -20,6 +20,8 @@ class Product extends Model
     }
 
     public function image(){
-        return $this->hasMany(Product_image::class,'product_id');
+        return $this->hasMany(Product_image::class,'product_id')->inRandomOrder();
     }
+
+   
 }

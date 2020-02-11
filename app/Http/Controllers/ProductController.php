@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Eloquent\Model\Product;
 use App\Eloquent\Model\Category;
 use App\Eloquent\Model\Product_image;
-
+use DB;
+use App\Eloquent\Model\Sub_categories;
 use Illuminate\Support\Facades\Redirect;
 
 
@@ -64,12 +65,14 @@ class ProductController extends Controller
             'name' => 'required',
             'category_id' => 'required',
             'status' => 'required',
+            'subcategory_id' => 'required',
 //            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $product = new Product();
         $product->name = $request->input('name');
         $product->category_id = $request->input('category_id');
+        $product->subcategory_id = $request->input('subcategory_id');
         $product->status = $request->input('status');
         $product->save();
 
@@ -122,8 +125,10 @@ class ProductController extends Controller
     {
         $category = Category::all();
         $product = Product::find($id);
+       $catId = $product->category_id;
+        $subcategory = Sub_categories::where('category_id',$catId)->get();
 //        $productimage = Product_image::where('product_id',$id)->get();
-        return view('products.edit',compact('product','category'));
+        return view('products.edit',compact('product','category','subcategory'));
     }
 
     /**
@@ -139,6 +144,7 @@ class ProductController extends Controller
         $validate =$request->validate([
             'name' => 'required',
             'category_id' => 'required',
+            'subcategory_id' => 'required',
             'status'  => 'required',
         ]);
 //        $validate1 =$request->validate([
@@ -202,5 +208,17 @@ class ProductController extends Controller
         $product->save();
 //        Product::whereId($request->id)->update($product);
         return response()->json(['success'=>'Status change successfully.']);
+    }
+
+    public function fetchsubCategory($id){
+        $subcategories = Sub_categories::where('category_id',$id)->pluck('name','id');
+//        dd($subcategories);
+        return json_encode($subcategories);
+
+//        $subcategories = DB::table("sub_categories")->where("category_id",$id)->lists("name","id");
+//
+//        Project::where('project_active', 1)->lists('id','project_name');
+//        dd($subcategories);
+//        return json_encode($subcategories);
     }
 }

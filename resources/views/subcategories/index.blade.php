@@ -52,7 +52,7 @@
                                 @foreach($allSubcategories as $all)
                                     <tr>
                                         <td>{{ $all->name }}</td>
-                                        <td> {{ $all->cat->name }}</td>
+                                        <td> {{ $all->cat1->name }}</td>
                                         <td>
                                             <form action="{{ route('subcategory.destroy',$all->id) }}" method="POST">
                                                 <a class="btn btn-info" href="{{ route('subcategory.show', $all->id) }}">View</a>

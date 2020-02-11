@@ -1,37 +1,48 @@
 <?php
 
 namespace App\Http\Controllers\Front;
-
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Eloquent\Model\Product;
-use App\Eloquent\Model\Product_image;
-use App\Eloquent\Model\Category;
-class ProductController extends Controller
+
+use App\User;
+
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-
-        if (isset($request->id)) {
-//            $fetchproduct = Product::where('category_id',$request->id)->get();
-//            $product = Product::with('image')->where('category_id',$request->id)->paginate(3);
-//            dd($product);
-            $product = Product::with('image')->where('subcategory_id',$request->id)->paginate(3);
-            $category = Category::all();
-            return view('frontEnd/index', compact('product', 'category'));
-        }else {
-            $product = Product::with('image')->paginate(3);
-            $category = Category::all();
-//            dd($category);
-            return view('frontEnd/index', compact('product', 'category'));
-        }
+        return view('frontEnd.login');
     }
 
+    public function register(Request $request){
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' =>['required', 'string', 'min:6'],
+        ]);
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+        $user->save();
+        return redirect()->back()->with('success','User created successfully.');
+    }
+
+
+    public function login(Request $request){
+        if (\Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $user = User::where('email', $request->email)->first();
+            return redirect('/');
+        } else {
+            session::flush();
+            return redirect()->back()->withErrors(['Incorrect login credentials']);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *

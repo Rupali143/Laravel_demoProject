@@ -15,6 +15,12 @@ class Sub_categories extends Model
 
     public function cat()
     {
+        return $this->belongsTo(Category::class,'id');
+    }
+
+    public function cat1()
+    {
         return $this->belongsTo(Category::class,'category_id');
     }
+
 }

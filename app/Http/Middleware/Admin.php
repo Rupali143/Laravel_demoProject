@@ -16,12 +16,21 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
-        $logged_in_user = \Auth::user();
-//        dd($logged_in_user->role);
-        if(isset($logged_in_user) && $logged_in_user->role == 1) {
-            return $next($request);
-        } else {
-            return redirect('/frontEnd');
+        $userRole = \Auth::user();
+//        dd($request->customer);
+        if($request->customer == 'customer'){
+            return redirect('/');
+        }else{
+            return redirect('home');
         }
+
+        return $next($request);
+//        $logged_in_user = \Auth::user();
+////        dd($logged_in_user->role);
+//        if(isset($logged_in_user) && $logged_in_user->role == 1) {
+//            return $next($request);
+//        } else {
+//            return redirect('/frontEnd');
+//        }
     }
 }

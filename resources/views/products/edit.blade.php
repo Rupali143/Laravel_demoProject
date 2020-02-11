@@ -93,16 +93,45 @@
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 col-form-label">Category</label>
                                     <div class="col-lg-9 col-xl-6">
-                                            {{--<select class="form-control" id="" name="category_id">--}}
                                                 <select name="category_id" required="required" class="form-control">
                                                     <option value="">--Select Category--</option>
                                                 @foreach($category as $category)
                                                     <option value="{{ $category->id }}" {{ $category->id == $product->category_id ? 'selected="selected"' : '' }}> {{ $category->name }} </option>
                                                 @endforeach
-
                                             </select>
                                     </div>
                                 </div>
+
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">SubCategory:</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <select name="subcategory_id" class="form-control" required="required">
+                                            <option value="">--Select SubCategory--</option>
+                                            @foreach($subcategory as $subcategory)
+                                                <option value="{{ $subcategory->id }}" {{ $subcategory->id == $product->subcategory_id ? 'selected="selected"' : '' }}> {{ $subcategory->name }} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                {{--<div class="btn-group show-on-hover">--}}
+                                    {{--@foreach ($category as $category)--}}
+                                        {{--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">--}}
+                                            {{--{{ $category->name }} <span class="caret"></span>--}}
+                                        {{--</button>--}}
+
+                                        {{--@foreach ($subcategory as $subcategory)--}}
+                                            {{--<ul class="dropdown-menu" role="menu">--}}
+                                                {{--@if ( $category->parent_id == $subcategory->id )--}}
+                                                    {{--<li><a href="">{{ $subcategory->name }}</a></li>--}}
+                                                {{--@endif--}}
+                                            {{--</ul>--}}
+                                        {{--@endforeach--}}
+                                    {{--@endforeach--}}
+                                {{--</div>--}}
+
+
                                 <div class="form-group row">
                                     <label class="col-xl-3 col-lg-3 col-form-label">Status</label>
                                     <div class="col-lg-9 col-xl-6">
@@ -155,6 +184,30 @@
 @endsection
 @section('scripts')
     <script src="{{ asset('js/multipleImg3.2.1.min.js' )}}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('select[name="category_id"]').on('change', function() {
+                var catID = $(this).val();
+                if(catID) {
+                    $.ajax({
+                        url: "{{ url('fetch_subCategory')}}/" + catID,
+                        type: "GET",
+                        dataType: "json",
+                        success:function(data) {
+                            $('select[name="subcategory_id"]').empty();
+                            $.each(data, function(key, value) {
+                                $('select[name="subcategory_id"]').append('<option value="'+ key +'">'+ value +'</option>');
+                            });
+                        }
+                    });
+                }else{
+                    $('select[name="subcategory_id"]').empty();
+                }
+            });
+        });
+    </script>
+
     <script>
         var abc = 0;
         var fixCount = 4;

@@ -49,19 +49,30 @@ class LoginController extends Controller
     }
 
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $this->validate($request, [
-            'email'    => 'required',
+            'email' => 'required',
             'password' => 'required',
         ]);
-        if (\Auth::attempt(['email'=>$request->email,'password'=>$request->password])) {
-            $user = User::where('email',$request->email)->first();
-            return redirect('home');
-        }
-        else{
-            return redirect()->back()->withErrors(['Incorrect login credentials']);
-        }
-        redirect('/home');
+//        if ($request->customer == 'customer') {
+//            if (\Auth::attempt(['email'=> $request->input('email'), 'password'=> $request->input('password')])) {
+//            if (\Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+//                $user = User::where('email', $request->email)->first();
+//                return redirect('/');
+//            } else {
+//                session::flush();
+//                return redirect()->back()->withErrors(['Incorrect login credentials']);
+//            }
+//        } else {
+            if (\Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                $user = User::where('email', $request->email)->first();
+                return redirect('home');
+            } else {
+                session::flush();
+                return redirect()->back()->withErrors(['Incorrect login credentials']);
+            }
+//        }
     }
 
     public function logout(Request $request){

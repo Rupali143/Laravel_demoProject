@@ -97,6 +97,16 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                                <label class="col-xl-3 col-lg-3 col-form-label">SubCategory:</label>
+                                <div class="col-lg-9 col-xl-6">
+                                <select name="subcategory_id" class="form-control" required="required">
+                                    <option value="">--Select SubCategory--</option>
+                                </select>
+                                </div>
+                            </div>
+
                             <div class="form-group row">
                                 <label class="col-xl-3 col-lg-3 col-form-label">Status</label>
                                 <div class="col-lg-9 col-xl-6">
@@ -143,6 +153,30 @@
 @endsection
 @section('scripts')
 <script src="{{ asset('js/multipleImg3.2.1.min.js' )}}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('select[name="category_id"]').on('change', function() {
+            var catID = $(this).val();
+            if(catID) {
+                $.ajax({
+                    url: "{{ url('fetch_subCategory')}}/" + catID,
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data) {
+                        $('select[name="subcategory_id"]').empty();
+                        $.each(data, function(key, value) {
+                            $('select[name="subcategory_id"]').append('<option value="'+ key +'">'+ value +'</option>');
+                        });
+                    }
+                });
+            }else{
+                $('select[name="subcategory_id"]').empty();
+            }
+        });
+    });
+</script>
+
 <script>
     var abc = 0;
     var count = 0;
