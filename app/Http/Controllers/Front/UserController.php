@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Front;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use Validator;
 use App\User;
 
 class UserController extends Controller
@@ -24,11 +24,14 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' =>['required', 'string', 'min:6'],
+            'confirm_password' => ['required','string','min:6'],
         ]);
+//        dd($request->all());
         $user = new User();
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
+        $user->confirm_password = Hash::make($request->input('confirm_password'));
         $user->save();
         return redirect()->back()->with('success','User created successfully.');
     }
@@ -43,6 +46,38 @@ class UserController extends Controller
             return redirect()->back()->withErrors(['Incorrect login credentials']);
         }
     }
+
+    public function profileDisplay(){
+            return view('frontEnd.profile');
+    }
+
+    public function updateProfile(Request $request){
+//        dd($request->all());
+
+        $validate =$request->validate([
+            'name' => 'required',
+            'email' => 'required',
+        ]);
+//        $validate1 =$request->validate([
+//            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+//        ]);
+        User::whereId($request->userid)->update($validate);
+
+
+
+//        $user = new User();
+//        $user->name = $request->input('name');
+//        $user->email = $request->input('email');
+////        $user->password = Hash::make($request->input('password'));
+//        User::whereId($request->userid)->update($user);;
+//        $user->confirm_password = Hash::make($request->input('confirm_password'));
+        return redirect()->back()->with('success','Profile Updated successfully.');
+//        return view('frontEnd.myAccount');
+    }
+
+
+
+
     /**
      * Show the form for creating a new resource.
      *

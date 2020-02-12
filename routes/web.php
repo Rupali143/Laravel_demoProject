@@ -63,3 +63,14 @@ Route::get('userloginform','Front\UserController@index');
 Route::post('userLogin','Front\UserController@login')->middleware('admin');
 
 Route::post('userRegister','Front\UserController@register');
+
+Route::get('google', function () {return view('googleAuth');});
+
+Route::get('auth/google', 'Auth\LoginController@redirectToGoogle');
+
+Route::get('auth/google/callback', 'Auth\LoginController@handleGoogleCallback');
+
+Route::get('profileDisplay','Front\UserController@profileDisplay')->name('profileDisplay');
+
+Route::post('updateProfile','Front\UserController@updateProfile')->name('updateProfile');
+
