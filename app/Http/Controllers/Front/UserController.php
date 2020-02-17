@@ -37,15 +37,16 @@ class UserController extends Controller
     }
 
 
-    public function login(Request $request){
-        if (\Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = User::where('email', $request->email)->first();
-            return redirect('/');
-        } else {
-            session::flush();
-            return redirect()->back()->withErrors(['Incorrect login credentials']);
-        }
-    }
+//    public function login(Request $request){
+//        if (\Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+//            $user = User::where('email', $request->email)->first();
+//            return redirect('/');
+//        } else {
+////            session::flush();
+//            return redirect()->back()->with("error","Incorrect login credentials. Please try again.");
+////            return redirect()->back()->withErrors(['Incorrect login credentials']);
+//        }
+//    }
 
     public function profileDisplay(){
             return view('frontEnd.profile');
@@ -58,12 +59,8 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required',
         ]);
-//        $validate1 =$request->validate([
-//            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-//        ]);
+        
         User::whereId($request->userid)->update($validate);
-
-
 
 //        $user = new User();
 //        $user->name = $request->input('name');
@@ -73,6 +70,36 @@ class UserController extends Controller
 //        $user->confirm_password = Hash::make($request->input('confirm_password'));
         return redirect()->back()->with('success','Profile Updated successfully.');
 //        return view('frontEnd.myAccount');
+    }
+
+
+    public function showChangePasswordForm(){
+        return view('frontEnd.changepassword');
+    }
+
+
+    public function changePassword(Request $request){
+
+        if (!(Hash::check($request->get('current-password'), \Auth::user()->password))) {
+            return redirect()->back()->with("error","Your current password does not matches. Please try again.");
+        }
+
+        if(strcmp($request->get('current-password'), $request->get('new-password')) == 0){
+            return redirect()->back()->with("error","New Password cannot be same as your current password. Please choose a different password.");
+        }
+
+        $validatedData = $request->validate([
+            'current-password' => 'required',
+            'new-password' => 'required|string|min:6|confirmed',
+        ]);
+
+//        dd($validatedData);
+
+        $user = \Auth::user();
+        $user->password = bcrypt($request->get('new-password'));
+        $user->save();
+        return redirect()->back()->with("success","Password changed successfully!");
+
     }
 
 

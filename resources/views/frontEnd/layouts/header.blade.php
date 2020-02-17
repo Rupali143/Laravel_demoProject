@@ -61,8 +61,10 @@
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
                             @if(Auth::user())
-                            <li><a href="{{url('myAccount')}}"><i class="fa fa-user"></i> Account</a></li>
-                                <li><a href="{{url('myAccount')}}"><i class="fa fa-user"></i> Change Password</a></li>
+                                <li><a href="{{ url('/')}}"><i class="fa fa-user"></i> Home</a></li>
+                            <li><a href="{{ url('myWishlist') }}"><i class="fa fa-heart"></i>My Wishlist</a></li>
+
+                                <li><a href="{{ route('changePassword')}}"><i class="fa fa-key"></i> Change Password</a></li>
                                 {{--<ul class="nav navbar-nav collapse navbar-collapse">--}}
                                     {{--<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>--}}
                                         {{--<ul role="menu" class="sub-menu">--}}

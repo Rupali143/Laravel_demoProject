@@ -61,11 +61,10 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="choose">
                     <ul class="nav nav-pills nav-justified">
-                        <li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-                        <li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
+                        <li><a href="{{ route('favourite',$product->id) }}"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
+                        {{--<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>--}}
                     </ul>
                 </div>
             </div>
@@ -101,8 +100,8 @@
 
                          <div class="choose">
                              <ul class="nav nav-pills nav-justified">
-                                 <li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-                                 <li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
+                                 <li><a href="{{ route('favourite',[$img->id,$img1->id])}}" data-id="{{$img1->id }}" class="rbutton"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
+                                 {{--<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>--}}
                              </ul>
                          </div>
                      </div>
@@ -113,3 +112,9 @@
      {{--{{ $product->links() }}--}}
     @endif
 @endsection
+<script src="{{ url('js/jquery1.12.js') }}"></script>
+<script>
+    $('.rbutton').on('click',function() {
+        $(this).prop("disabled",true);
+    });
+    </script>

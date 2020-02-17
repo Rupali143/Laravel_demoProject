@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Eloquent\Model\Product;
 use App\Eloquent\Model\Product_image;
 use App\Eloquent\Model\Category;
+use App\Eloquent\Model\Favourite;
 class ProductController extends Controller
 {
     /**
@@ -18,83 +19,47 @@ class ProductController extends Controller
     {
 
         if (isset($request->id)) {
-//            $fetchproduct = Product::where('category_id',$request->id)->get();
-//            $product = Product::with('image')->where('category_id',$request->id)->paginate(3);
-//            dd($product);
             $product = Product::with('image')->where('subcategory_id',$request->id)->paginate(3);
             $category = Category::all();
+//            dd($product);
             return view('frontEnd/index', compact('product', 'category'));
         }else {
             $product = Product::with('image')->paginate(3);
+//            dd($product);
             $category = Category::all();
-//            dd($category);
             return view('frontEnd/index', compact('product', 'category'));
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+   public function addfavourite($productId,$imgId){
+
+       $customerId = \Auth::user()->id;
+
+       $status = Favourite::where('customer_id',$customerId)->where('productimg_id',$imgId)->first();
+       if(isset($status->customer_id) and isset($productId))
+       {
+           return redirect()->back()->with('error', 'This item is already in your wishlist!');
+       }else {
+
+           $favourite = new Favourite();
+           $favourite->product_id = $productId;
+           $favourite->customer_id = $customerId;
+           $favourite->productimg_id = $imgId;
+           $favourite->save();
+           return redirect()->back()->with('success', 'Added to Favourite list successfully.');
+       }
+   }
+
+    public function displayWishlist(){
+        $favourites = Favourite::with('productImages')->paginate(3);
+//        dd($favourites->toArray());
+        return view('frontEnd.myWishlist',compact('favourites'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function deleteWishlist($id){
+//        dd($id);
+        $product = Favourite::where('productimg_id',$id)->delete();
+        return redirect()->back()->with('success','Product deleted Successfully');
     }
 }

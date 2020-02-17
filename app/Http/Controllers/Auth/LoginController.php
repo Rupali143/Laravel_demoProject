@@ -52,21 +52,10 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-//dd($request);
         $this->validate($request, [
             'email' => 'required',
             'password' => 'required',
         ]);
-//        if ($request->customer == 'customer') {
-//            if (\Auth::attempt(['email'=> $request->input('email'), 'password'=> $request->input('password')])) {
-//            if (\Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-//                $user = User::where('email', $request->email)->first();
-//                return redirect('/');
-//            } else {
-//                session::flush();
-//                return redirect()->back()->withErrors(['Incorrect login credentials']);
-//            }
-//        } else {
             if (\Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $user = User::where('email', $request->email)->first();
                 if($user->role == 0){
@@ -77,7 +66,7 @@ class LoginController extends Controller
 
             } else {
                 session::flush();
-                return redirect()->back()->withErrors(['Incorrect login credentials']);
+                return redirect()->back()->with("error","Incorrect login credentials. Please try again.");
             }
     }
 
@@ -101,7 +90,7 @@ class LoginController extends Controller
             $user = Socialite::driver('google')->user();
 
             $finduser = User::where('google_id', $user->id)->first();
-dd($finduser);
+
             if($finduser){
 
                 \Auth::login($finduser);

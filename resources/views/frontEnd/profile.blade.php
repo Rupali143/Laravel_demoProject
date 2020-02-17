@@ -12,19 +12,16 @@
             </div>
         @endif
         <div class="row">
-                <div class="signup-form"><!--sign up form-->
+                <div class="signup-form">
                     <h2>Edit Profile!</h2>
                     <form action="{{ url('updateProfile' )}}" method="post">
                         @csrf
                         <input type="hidden" name="userid" value="{{ Auth::user()->id }}">
                         <input type="text" placeholder="Name" name="name" required value="{{ Auth::user()->name }}"/>
                         <input type="email" placeholder="Email Address" name="email" value="{{ Auth::user()->email }}" readonly/>
-                        {{--<input type="password" placeholder="Password" name="password" id="password" required value="{{ Auth::user()->password }}"/>--}}
-                        {{--<input type="password" placeholder="Confirm Password" name="confirm_password"  id="confirm_password"  value="{{ Auth::user()->confirm_password}}" required/>--}}
-                        {{--<div id="display_error" style="color: #ff0000;"></div>--}}
                         <input type="submit" class="btn btn-primary" value="Update Profile" onclick="">
                     </form>
-                </div><!--/sign up form-->
+                </div>
         </div>
     </div>
     @endsection

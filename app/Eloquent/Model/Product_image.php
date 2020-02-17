@@ -18,4 +18,8 @@ class Product_image extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function favourites(){
+        return $this->belongsTo(Favourite::class);
+    }
 }

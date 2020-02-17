@@ -74,3 +74,12 @@ Route::get('profileDisplay','Front\UserController@profileDisplay')->name('profil
 
 Route::post('updateProfile','Front\UserController@updateProfile')->name('updateProfile');
 
+Route::get('/changePassword','Front\UserController@showChangePasswordForm')->name('changePassword');
+
+Route::post('/changePassword','Front\UserController@changePassword')->name('change.Password');
+
+Route::get('/favourite/{productId}/{imgId}','Front\ProductController@addfavourite')->name('favourite')->middleware('auth');
+
+Route::get('/myWishlist','Front\ProductController@displayWishlist')->name('myWishlist');
+
+Route::get('deleteWishlist/{id}','Front\ProductController@deleteWishlist')->name('deleteWishlist');

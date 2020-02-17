@@ -93,12 +93,26 @@
     </div>
 </section><!--/slider-->
 
+
 <section>
     <div class="container">
+
+        @if (session('error'))
+            <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ session('error') }}
+            </div>
+        @endif
+        @if (session('success'))
+            <div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="row">
             <div class="col-sm-3">
                 <div class="left-sidebar">
-
                     @yield('main-sidebar')
                 </div>
             </div>
