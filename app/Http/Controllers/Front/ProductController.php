@@ -22,44 +22,45 @@ class ProductController extends Controller
             $product = Product::with('image')->where('subcategory_id',$request->id)->paginate(3);
             $category = Category::all();
 //            dd($product);
-            return view('frontEnd/index', compact('product', 'category'));
+            $favourites = Favourite::all();
+            return view('frontEnd/index', compact('product', 'category','favourites'));
         }else {
             $product = Product::with('image')->paginate(3);
-//            dd($product);
+
             $category = Category::all();
-            return view('frontEnd/index', compact('product', 'category'));
+            $favourites = Favourite::all(); 
+            return view('frontEnd/index', compact('product', 'category','favourites'));
         }
     }
 
-   public function addfavourite($productId,$imgId){
+   public function addfavourite($productId){
 
        $customerId = \Auth::user()->id;
-
-       $status = Favourite::where('customer_id',$customerId)->where('productimg_id',$imgId)->first();
+       $status = Favourite::where('customer_id',$customerId)->where('product_id',$productId)->first();
        if(isset($status->customer_id) and isset($productId))
        {
            return redirect()->back()->with('error', 'This item is already in your wishlist!');
        }else {
-
            $favourite = new Favourite();
            $favourite->product_id = $productId;
            $favourite->customer_id = $customerId;
-           $favourite->productimg_id = $imgId;
+          // $favourite->productimg_id = $imgId;
            $favourite->save();
            return redirect()->back()->with('success', 'Added to Favourite list successfully.');
        }
    }
 
     public function displayWishlist(){
-        $favourites = Favourite::with('productImages')->paginate(3);
-//        dd($favourites->toArray());
+        $customerId = \Auth::user()->id;
+        $favourites = Favourite::with('productImages')->where('customer_id',$customerId)->paginate(3);
+//        dd($favourites->all());
         return view('frontEnd.myWishlist',compact('favourites'));
     }
 
 
     public function deleteWishlist($id){
-//        dd($id);
-        $product = Favourite::where('productimg_id',$id)->delete();
+        //dd($id);
+        $product = Favourite::where('product_id',$id)->delete();
         return redirect()->back()->with('success','Product deleted Successfully');
     }
 }

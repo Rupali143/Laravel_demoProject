@@ -26,10 +26,10 @@ class Admin
 //        return $next($request);
 
         $logged_in_user = Auth::user();
-        if(isset($logged_in_user) && $logged_in_user->role == 1) {
+        if(isset($logged_in_user) && $logged_in_user->role == 0) {
             return $next($request);
         } else {
-            return redirect('/');
+            return redirect()->route('frontEnd.login');
         }
     }
 }

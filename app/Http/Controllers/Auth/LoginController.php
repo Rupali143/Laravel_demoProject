@@ -95,7 +95,7 @@ class LoginController extends Controller
 
                 \Auth::login($finduser);
 
-                return redirect('/home');
+                return redirect('/');
 
             }else{
                 $newUser = User::create([

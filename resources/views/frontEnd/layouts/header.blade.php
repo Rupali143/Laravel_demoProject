@@ -18,7 +18,7 @@
                             <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                             <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
                             <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                            <li><a href="{{ url('auth/google') }}"><i class="fa fa-google-plus"></i></a></li>
+                            {{--<li><a href="{{ url('auth/google') }}"><i class="fa fa-google-plus"></i></a></li>--}}
                         </ul>
                     </div>
                 </div>
@@ -62,6 +62,7 @@
                         <ul class="nav navbar-nav">
                             @if(Auth::user())
                                 <li><a href="{{ url('/')}}"><i class="fa fa-user"></i> Home</a></li>
+                                <li><a href="{{ url('profileDisplay')}}"><i class="fa fa-user"></i> My Account</a></li>
                             <li><a href="{{ url('myWishlist') }}"><i class="fa fa-heart"></i>My Wishlist</a></li>
 
                                 <li><a href="{{ route('changePassword')}}"><i class="fa fa-key"></i> Change Password</a></li>
@@ -75,6 +76,7 @@
                                     {{--</ul>--}}
                             <li><a href="{{ url('logout') }}"><i class="fa fa-lock"></i> Logout</a></li>
                             @else
+                                <li><a href="{{ url('auth/google') }}"><i class="fa fa-google-plus"></i></a></li>
                             <li><a href="{{ url('userloginform') }}"><i class="fa fa-lock"></i> Login</a></li>
                             @endif
                         </ul>

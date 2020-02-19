@@ -21,6 +21,11 @@ class Product extends Model
 
     public function image(){
         return $this->hasMany(Product_image::class,'product_id')->inRandomOrder();
+//        return $this->hasOne(Product_image::class,'product_id')->select(Product_image::class,'images', \DB::raw('count(*) as total'))->distinct(Product_image::class,'images')->groupBy(Product_image::class,'images')->inRandomOrder();
+    }
+
+    public function favourite(){
+        return $this->hasOne(Favourite::class,'product_id');
     }
 
    

@@ -58,7 +58,7 @@ Route::middleware(['admin'])->group(function () {
 
 Route::get('/fetchproducts/{id}', 'Front\ProductController@index')->name('fetch.products');
 
-Route::get('userloginform','Front\UserController@index');
+Route::get('userloginform','Front\UserController@index')->name('frontEnd.login');
 
 Route::post('userLogin','Front\UserController@login')->middleware('admin');
 
@@ -78,7 +78,7 @@ Route::get('/changePassword','Front\UserController@showChangePasswordForm')->nam
 
 Route::post('/changePassword','Front\UserController@changePassword')->name('change.Password');
 
-Route::get('/favourite/{productId}/{imgId}','Front\ProductController@addfavourite')->name('favourite')->middleware('auth');
+Route::get('/favourite/{productId}','Front\ProductController@addfavourite')->name('favourite')->middleware('admin');
 
 Route::get('/myWishlist','Front\ProductController@displayWishlist')->name('myWishlist');
 

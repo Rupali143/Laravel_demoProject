@@ -14,6 +14,11 @@ class Favourite extends Model
 
 
     public function productImages(){
-        return $this->hasMany(Product_image::class,'id','productimg_id');
+        return $this->hasMany(Product_image::class,'product_id');
+    }
+
+
+    public function product(){
+        return $this->belongsTo(Product::class);
     }
 }
