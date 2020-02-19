@@ -65,6 +65,7 @@ class ProductController extends Controller
             'name' => 'required',
             'category_id' => 'required',
             'status' => 'required',
+            'price' => 'required',
             'subcategory_id' => 'required',
 //            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -74,6 +75,7 @@ class ProductController extends Controller
         $product->category_id = $request->input('category_id');
         $product->subcategory_id = $request->input('subcategory_id');
         $product->status = $request->input('status');
+        $product->price = $request->input('price');
         $product->save();
 
         $lastId = $product->id;
@@ -146,6 +148,7 @@ class ProductController extends Controller
             'category_id' => 'required',
             'subcategory_id' => 'required',
             'status'  => 'required',
+            'price' => 'required'
         ]);
 //        $validate1 =$request->validate([
 //            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',

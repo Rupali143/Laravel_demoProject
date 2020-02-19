@@ -13,10 +13,6 @@
     <link href="{{asset('frontEnd/css/animate.css')}}" rel="stylesheet">
     <link href="{{asset('frontEnd/css/main.css')}}" rel="stylesheet">
     <link href="{{asset('frontEnd/css/responsive.css')}}" rel="stylesheet">
-    <!--[if lt IE 9]>
-    <!--<script src="js/html5shiv.js"></script>-->
-    <!--<script src="js/respond.min.js"></script>-->
-    {{--<![endif]-->--}}
 </head><!--/head-->
 <body>
 <header id="header"><!--header-->
@@ -77,17 +73,6 @@
                         </div>
                     </div>
                 </div>
-                {{--<div class="col-sm-8">--}}
-                    {{--<div class="shop-menu pull-right">--}}
-                        {{--<ul class="nav navbar-nav">--}}
-                            {{--<li><a href=""><i class="fa fa-user"></i> Account</a></li>--}}
-                            {{--<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>--}}
-                            {{--<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>--}}
-                            {{--<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>--}}
-                            {{--<li><a href="{{ url('userloginform') }}" class="active"><i class="fa fa-lock"></i> Login</a></li>--}}
-                        {{--</ul>--}}
-                    {{--</div>--}}
-                {{--</div>--}}
             </div>
         </div>
     </div><!--/header-middle-->
@@ -134,7 +119,7 @@
                 <h2 class="or">OR</h2>
             </div>
             <div class="col-sm-4">
-                <div class="signup-form"><!--sign up form-->
+                <div class="signup-form">
                     <h2>New User Signup!</h2>
                     <form action="{{ url('userRegister' )}}" method="post">
                         @csrf
@@ -145,7 +130,7 @@
                         <div id="display_error" style="color: #ff0000;"></div>
                         <input type="submit" class="btn btn-primary" value="Signup" onclick="return Validate()">
                     </form>
-                </div><!--/sign up form-->
+                </div>
             </div>
         </div>
     </div>

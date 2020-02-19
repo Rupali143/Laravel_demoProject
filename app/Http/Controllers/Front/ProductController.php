@@ -13,23 +13,22 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Responses
      */
     public function index(Request $request)
     {
 
         if (isset($request->id)) {
-            $product = Product::with('image')->where('subcategory_id',$request->id)->paginate(3);
+            $products = Product::with('image')->where('subcategory_id',$request->id)->paginate(3);
             $category = Category::all();
 //            dd($product);
             $favourites = Favourite::all();
-            return view('frontEnd/index', compact('product', 'category','favourites'));
+            return view('frontEnd/index', compact('products', 'category','favourites'));
         }else {
-            $product = Product::with('image')->paginate(3);
-
+            $products = Product::with('image')->paginate(3);
             $category = Category::all();
-            $favourites = Favourite::all(); 
-            return view('frontEnd/index', compact('product', 'category','favourites'));
+            $favourites = Favourite::all();
+            return view('frontEnd/index', compact('products', 'category','favourites'));
         }
     }
 
@@ -59,8 +58,15 @@ class ProductController extends Controller
 
 
     public function deleteWishlist($id){
-        //dd($id);
-        $product = Favourite::where('product_id',$id)->delete();
+
+        $customerId = \Auth::user()->id;
+        $product = Favourite::where('product_id',$id)->where('customer_id',$customerId)->delete();
         return redirect()->back()->with('success','Product deleted Successfully');
+    }
+
+    public function productDetails($id){
+        $productDetails = Product::with('image')->where('id',$id)->get();
+//        dd($productDetails);
+        return view('frontEnd.productDetails',compact('productDetails'));
     }
 }

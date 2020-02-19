@@ -19,7 +19,7 @@
     <!-- end:: Subheader -->
     <div class="kt-portlet__body">
         @if (session()->has('success'))
-            <div class="alert alert-success fade show" role="alert">
+            <div class="alert alert-success" role="alert">
                 <div class="alert-text"><strong>
                         {!! session()->get('success') !!} !!
                     </strong></div>

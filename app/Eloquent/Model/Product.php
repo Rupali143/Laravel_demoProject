@@ -20,13 +20,16 @@ class Product extends Model
     }
 
     public function image(){
-        return $this->hasMany(Product_image::class,'product_id')->inRandomOrder();
-//        return $this->hasOne(Product_image::class,'product_id')->select(Product_image::class,'images', \DB::raw('count(*) as total'))->distinct(Product_image::class,'images')->groupBy(Product_image::class,'images')->inRandomOrder();
+        return $this->hasMany(Product_image::class,'product_id');
     }
-
+//->inRandomOrder()
     public function favourite(){
-        return $this->hasOne(Favourite::class,'product_id');
+        return $this->hasOne(Favourite::class,'product_id')->where('customer_id',\Auth::user()->id);
     }
 
+    //for productsDetails
+    public function productImages(){
+
+     }
    
 }

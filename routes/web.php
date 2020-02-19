@@ -11,8 +11,6 @@
 |
 */
 
-//Route::get('/', function () {return view('welcome'); });
-
 Route::get('/', 'Front\ProductController@index');
 
 Auth::routes();
@@ -33,8 +31,6 @@ Route::get('delete_order/{id}', 'ProductController@deleteorder')->name('delete.o
 
 Route::post('updateSort','CategoryController@updateSort')->name('update.sort');
 
-//Route::get('changeStatus','ProductController@changeStatus')->name('change.status');
-
 Route::get('changeStatus', 'ProductController@changeStatus');
 
 Route::get('changeStatusCat', 'CategoryController@changeStatusCat');
@@ -52,13 +48,12 @@ Route::middleware(['admin'])->group(function () {
 });
 
 
-
 //front-End
 
 
-Route::get('/fetchproducts/{id}', 'Front\ProductController@index')->name('fetch.products');
+Route::get('/fetchProducts/{id}', 'Front\ProductController@index')->name('fetch.products');
 
-Route::get('userloginform','Front\UserController@index')->name('frontEnd.login');
+Route::get('userLoginForm','Front\UserController@index')->name('frontEnd.login');
 
 Route::post('userLogin','Front\UserController@login')->middleware('admin');
 
@@ -83,3 +78,8 @@ Route::get('/favourite/{productId}','Front\ProductController@addfavourite')->nam
 Route::get('/myWishlist','Front\ProductController@displayWishlist')->name('myWishlist');
 
 Route::get('deleteWishlist/{id}','Front\ProductController@deleteWishlist')->name('deleteWishlist');
+
+
+Route::get('productAddToCart/{id}','Front\ShoppingCartController@index')->name('cart.add');
+
+Route::get('productDetails/{id}','Front\ProductController@productDetails')->name('product.details');

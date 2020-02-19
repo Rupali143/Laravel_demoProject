@@ -14,11 +14,16 @@ class Favourite extends Model
 
 
     public function productImages(){
-        return $this->hasMany(Product_image::class,'product_id');
+        return $this->hasMany(Product_image::class,'product_id','product_id');
     }
 
 
     public function product(){
         return $this->belongsTo(Product::class);
+//        return $this->hasOneThrough(Product_image::class,Product::class,'id');
+    }
+
+    public function oneProductImg(){
+        return $this->hasOne(Product_image::class,'product_id');
     }
 }
