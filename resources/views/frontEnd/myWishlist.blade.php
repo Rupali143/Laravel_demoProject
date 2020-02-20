@@ -29,7 +29,7 @@
 
                             <div class="choose">
                                 <ul class="nav nav-pills nav-justified">
-                                    <li><a href="{{ route('deleteWishlist',[$favourite->product_id]) }}"><i class="fa fa-close"></i>Delete from Wishlist</a></li>
+                                    <li><a href="{{ route('deleteWishList',[$favourite->product_id]) }}"><i class="fa fa-close"></i>Delete from Wishlist</a></li>
                                 </ul>
                             </div>
                         </div>

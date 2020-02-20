@@ -11,6 +11,8 @@
 |
 */
 
+//Admin Start
+
 Route::get('/', 'Front\ProductController@index');
 
 Auth::routes();
@@ -47,9 +49,10 @@ Route::middleware(['admin'])->group(function () {
     
 });
 
+//Admin End
 
-//front-End
 
+//front-End Start
 
 Route::get('/fetchProducts/{id}', 'Front\ProductController@index')->name('fetch.products');
 
@@ -59,27 +62,31 @@ Route::post('userLogin','Front\UserController@login')->middleware('admin');
 
 Route::post('userRegister','Front\UserController@register');
 
+//Login with google start
 Route::get('google', function () {return view('googleAuth');});
-
-Route::get('auth/google', 'Auth\LoginController@redirectToGoogle');
-
+Route::get('auth/google', 'Auth\LoginController@redirectToGoogle')->name('auth.google');
 Route::get('auth/google/callback', 'Auth\LoginController@handleGoogleCallback');
+////Login with google end
 
+//My profile & change password start
 Route::get('profileDisplay','Front\UserController@profileDisplay')->name('profileDisplay');
-
 Route::post('updateProfile','Front\UserController@updateProfile')->name('updateProfile');
-
 Route::get('/changePassword','Front\UserController@showChangePasswordForm')->name('changePassword');
-
 Route::post('/changePassword','Front\UserController@changePassword')->name('change.Password');
+//My profile & change password end
 
+
+//My WishList Start
 Route::get('/favourite/{productId}','Front\ProductController@addfavourite')->name('favourite')->middleware('admin');
+Route::get('/myWishList','Front\ProductController@displayWishList')->name('myWishList');
+Route::get('deleteWishList/{id}','Front\ProductController@deleteWishList')->name('deleteWishList');
+//My WishList End
 
-Route::get('/myWishlist','Front\ProductController@displayWishlist')->name('myWishlist');
-
-Route::get('deleteWishlist/{id}','Front\ProductController@deleteWishlist')->name('deleteWishlist');
-
-
-Route::get('productAddToCart/{id}','Front\ShoppingCartController@index')->name('cart.add');
 
 Route::get('productDetails/{id}','Front\ProductController@productDetails')->name('product.details');
+
+//Shopping Cart
+Route::get('productAddToCart/{id}','Front\ShoppingCartController@index')->name('cart.add')->middleware('admin');
+Route::get('displayProductsCart','Front\ShoppingCartController@displayProductsCart')->name('cart.display')->middleware('admin');
+
+

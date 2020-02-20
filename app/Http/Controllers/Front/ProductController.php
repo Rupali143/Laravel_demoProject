@@ -49,16 +49,14 @@ class ProductController extends Controller
        }
    }
 
-    public function displayWishlist(){
+    public function displayWishList(){
         $customerId = \Auth::user()->id;
         $favourites = Favourite::with('productImages')->where('customer_id',$customerId)->paginate(3);
-//        dd($favourites->all());
         return view('frontEnd.myWishlist',compact('favourites'));
     }
 
 
-    public function deleteWishlist($id){
-
+    public function deleteWishList($id){
         $customerId = \Auth::user()->id;
         $product = Favourite::where('product_id',$id)->where('customer_id',$customerId)->delete();
         return redirect()->back()->with('success','Product deleted Successfully');
@@ -66,7 +64,6 @@ class ProductController extends Controller
 
     public function productDetails($id){
         $productDetails = Product::with('image')->where('id',$id)->get();
-//        dd($productDetails);
         return view('frontEnd.productDetails',compact('productDetails'));
     }
 }

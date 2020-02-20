@@ -28,7 +28,7 @@ class Product extends Model
     }
 
     //for productsDetails
-    public function productImages(){
+    public function productImage(){
 
      }
    

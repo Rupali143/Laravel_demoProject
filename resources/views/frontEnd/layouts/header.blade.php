@@ -39,9 +39,11 @@
                         <ul class="nav navbar-nav">
                             @if(Auth::user())
                                 <li><a href="{{ url('/')}}"><i class="fa fa-user"></i> Home</a></li>
-                                <li><a href="{{ url('profileDisplay')}}"><i class="fa fa-user"></i> My Account</a></li>
-                                <li><a href="{{ url('myWishlist') }}"><i class="fa fa-heart"></i>My Wishlist</a></li>
-                                <li><a href="" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>My cart</a></li>
+                                <li><a href="{{ route('profileDisplay')}}"><i class="fa fa-user"></i> My Account</a></li>
+                                <li><a href="{{ route('myWishList') }}"><i class="fa fa-heart"></i>My WishList</a></li>
+                                <li><a href="{{ route('cart.display') }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i> My cart <span class="badge" style="color: black;">{{Session::has('cart') ? Session::get('cart')->totalQty : ''}}</span></a>
+
+                                </li>
                                 <li><a href="{{ route('changePassword')}}"><i class="fa fa-key"></i> Change Password</a></li>
                                 {{--<ul class="nav navbar-nav collapse navbar-collapse">--}}
                                     {{--<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>--}}
@@ -53,7 +55,7 @@
                                     {{--</ul>--}}
                             <li><a href="{{ url('logout') }}"><i class="fa fa-lock"></i> Logout</a></li>
                             @else
-                                <li><a href="{{ url('auth/google') }}"><i class="fa fa-google-plus"></i></a></li>
+                                <li><a href="{{ route('auth.google') }}"><i class="fa fa-google-plus"></i></a></li>
                             <li><a href="{{ url('userLoginForm') }}"><i class="fa fa-lock"></i> Login</a></li>
                             @endif
                         </ul>

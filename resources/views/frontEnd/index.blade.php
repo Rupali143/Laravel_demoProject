@@ -33,7 +33,7 @@
     <div class="features_items">
         <h2 class="title text-center">Latest Products</h2>
         @foreach($products as $product)
-            {{--@foreach($pro->image as $img1)<div class="row"> {{ $product->links() }} </div>--}}
+            {{--@foreach($pro->image as $img1)<div class="row">--}}
             <div class="col-sm-4">
             <div class="product-image-wrapper">
                 <div class="single-products">
@@ -71,7 +71,6 @@
     @else
      <div class="features_items">
          <h2 class="title text-center">Latest Products</h2>
-        {{--<div class="row"> {{ $product->links() }} </div>--}}
          @foreach($products as $product)
              {{--@foreach($favourites as $favourite)--}}
                  {{--@dd($favourites)--}}
