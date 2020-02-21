@@ -89,4 +89,8 @@ Route::get('productDetails/{id}','Front\ProductController@productDetails')->name
 Route::get('productAddToCart/{id}','Front\ShoppingCartController@index')->name('cart.add')->middleware('admin');
 Route::get('displayProductsCart','Front\ShoppingCartController@displayProductsCart')->name('cart.display')->middleware('admin');
 
+Route::get('removeProductFromCart/{id}','Front\ShoppingCartController@removeProductFromCart')->name('deleteSession.product');
+
+Route::get('updateQuantity/{id}/{val_id}','Front\ShoppingCartController@updateQuantity')->name('update.quantity');
+
 

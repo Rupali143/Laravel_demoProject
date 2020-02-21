@@ -124,6 +124,14 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label class="col-xl-3 col-lg-3 col-form-label">Quantity</label>
+                                <div class="col-lg-9 col-xl-6">
+                                    <input class="form-control" type="number" name="quantity" placeholder="Enter Product quantity" required>
+                                </div>
+                            </div>
+
+
                             {{--<div class="form-group row">--}}
                                 {{--<label class="col-xl-3 col-lg-3 col-form-label">Image</label>--}}
                                 {{--<div class="col-lg-9 col-xl-6">--}}

@@ -150,6 +150,12 @@
                                         <input class="form-control" type="text" name="price"  value="{{ $product->price }}" placeholder="Enter Product Price" required>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label class="col-xl-3 col-lg-3 col-form-label">Quantity</label>
+                                    <div class="col-lg-9 col-xl-6">
+                                        <input class="form-control" type="number" name="quantity"  value="{{ $product->quantity }}" placeholder="Enter Product quantity" required>
+                                    </div>
+                                </div>
                                 <div class="form-group row" id="displayImg">
                                     <label class="col-xl-3 col-lg-3 col-form-label">Images</label>
                                     <div class="col-lg-9 col-xl-6">

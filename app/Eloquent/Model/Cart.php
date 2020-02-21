@@ -12,15 +12,15 @@ class Cart extends Model
 
     protected $fillable = ['product_id','product_name'];
 
-    public $items =null;
+    public $item =null;
     public $totalQty = 0;
     public $totalPrice = 0;
 
     public function __construct($oldCart)
     {
-        if($oldCart){   //dd($oldCart->items);
-            $this->id = $oldCart->id;
-            $this->items = $oldCart->items;
+        if($oldCart){   //dd($oldCart->item);
+//            $this->id = $oldCart->id;
+            $this->item = $oldCart->item;
             $this->totalQty = $oldCart->totalQty;
             $this->totalPrice = $oldCart->totalPrice;
         }
@@ -29,17 +29,16 @@ class Cart extends Model
     public function add($item,$id){
         $storedItem = ['qty' => 0,'price' =>$item->price ,'item' => $item];
 
-        if($this->items) { dd(12);
-            if (array_key_exists($id, $this->items)) {
-                $storedItem = $this->items[$id];
+        if($this->item) {
+            if (array_key_exists($id, $this->item)) {
+                $storedItem = $this->item[$id];
             }
         }
-                $this->items[$id] = $storedItem;
+
                 $storedItem['qty']++;
                 $storedItem['price'] = $item->price * $storedItem['qty'];
-
+                $this->item[$id] = $storedItem;
                 $this->totalQty++;
                 $this->totalPrice += $item->price;
-
     }
 }

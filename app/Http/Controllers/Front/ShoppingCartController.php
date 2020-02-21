@@ -12,13 +12,16 @@ class ShoppingCartController extends Controller
 {
 
     public function index(Request $request, $id){
-        $productDetails = Product::with('image')->where('id',$request->id)->first();
+//        $productDetails = Product::with('image')->where('id',$request->id)->first();
+        $productDetails =Product::find($request->id);
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
-        $cart = new Cart($productDetails);
-        $cart->add($productDetails, $productDetails->id);
+        $cart = new Cart($oldCart);
+        $cart->add($productDetails, $request->id);
         $request->session()->put('cart',$cart);
+//        $totalItems = Session::get('cart')->totalQty; dd($totalItems);
 //        dd($request->session()->get('cart'));
-        return redirect()->route('cart.display');
+//        return redirect()->route('cart.display');
+        return redirect()->back()->with('success', 'Added Product to Cart list successfully.');
     }
 
     public function displayProductsCart(){
@@ -26,25 +29,48 @@ class ShoppingCartController extends Controller
             return view('frontEnd.myCart');
         }else{
             $oldCart = Session::get('cart');
-//            dd($oldCart);
-            $cart = new Cart($oldCart);
-//            dd($cart);
-            return view('frontEnd.myCart',['products'=>$cart->items,'totalPrice'=>$cart->totalPrice]);
+            $cart = new Cart($oldCart); //dd($cart->item);
+            return view('frontEnd.myCart',['products'=>$cart->item,'totalPrice'=>$cart->totalPrice]);
         }
     }
-//    public function index(Request $request){
-//        $productDetails = Product::with('image')->where('id',$request->id)->first();
-////        dd($productDetails->image[0]);
-//        $cart = new Cart();
-//        $cart->product_id = $productDetails->id;
-//        $cart->product_name = $productDetails->name;
-//        $cart->product_price = $productDetails->price;
-//        $cart->save();
-//        return redirect()->route('cart.display');
-//    }
-//
-//    public function displayProductsCart(){
-//        $cartDetails = Cart::all();
-//        return view('frontEnd.myCart',compact('cartDetails'));
-//    }
+
+    public function removeProductFromCart($id){
+        $cart = Session::get('cart');
+        unset($cart->item[$id]);
+        Session::put('cart', $cart);
+        return redirect()->back()->with('success', 'Product Deleted Successfully from Session.');
+    }
+
+    public function updateQuantity($id,$val_id){
+//       dd(Session::get('cart')->item);
+        foreach(Session::get('cart')->item as $item){
+            $selectedQuantity = $item['qty'] + $val_id;
+
+            if($item['item']['id'] == $id){
+                $item['qty'] = $selectedQuantity;
+            }
+//print_r($selectedQuantity);
+//            dd($item);
+            $oldCart = Session::get('cart');
+            $cart = new Cart($oldCart);
+//            dd($oldCart);
+//            foreach($cart->item as $item){
+//                $quantity = $item['item']['quantity'];
+////                if($quantity > $items){
+////                    echo'stock';
+////                }else{
+////                    echo'not in stock';
+////                }
+//                $item['qty']=$selectedQuantity;
+//            }
+//            $cart[$id]->item =$item['qty'];
+//            dd($cart);
+
+//            dd(Session::get('cart'));
+
+            Session::put('cart', $cart);
+            return redirect()->back()->with('success', 'Product Quantity Successfully updated.');
+        }
+
+    }
 }

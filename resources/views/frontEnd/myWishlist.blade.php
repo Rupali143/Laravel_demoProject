@@ -1,5 +1,5 @@
 @extends('frontEnd/layouts/master')
-@section('main-section')
+@section('main-content')
         <div class="features_items">
             <h2 class="title text-center">My WishList</h2>
             {{--<div class="row"> {{ $favourites->links() }} </div>--}}
