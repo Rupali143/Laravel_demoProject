@@ -29,30 +29,21 @@
                         <td class="cart_description">
                             <h4><a href="">{{ $product['item']['name'] }}</a></h4>
                         </td>
-                        <td class="cart_price">s
-                            <p>{{ $product['price'] }}</p>
+                        <td class="cart_price">
+                            <p id="price{{$product['item']['id']}}" value="{{ $product['price'] }}">{{ $product['price'] }}</p>
                         </td>
                         <td class="cart_quantity">
-                        {{--@foreach($product['item'])--}}
-                            {{--<input type="number" name="quantity" value=" {{ $product['item']['qty'] }} ">--}}
-                        {{--<div class="cart_quantity_button">--}}
-                        {{--<a class="cart_quantity_up" onclick="changeItemQuantity1('{{ $product['item']['id']}}', 1 );return false;" href="#"> + </a>--}}
-                        {{--<input class="cart_quantity_input quantity" type="text" data-id="{{ $product['qty'] }}" name="quantity" value="{{ $product['qty'] }}" autocomplete="off" size="2">--}}
-                        {{--<a class="cart_quantity_down" onclick="changeItemQuantity1('{{ $product['item']['id']}}', -1 );return false;" href="#"> - </a>--}}
-                        {{--</div>--}}
-                        <td class="cart_quantity">
-                            <div class="cart_quantity_button">
-                                <a class="cart_quantity_up" href="{{ route('update.quantity',[$product['item']['id'],1])}}" onclick="updateQty($product['item']['id'],1);"> + </a>
-                                <input class="cart_quantity_input" type="text" name="quantity" value="{{ $product['qty'] }}" autocomplete="off" size="2">
-                                <a class="cart_quantity_down" href="{{ route('update.quantity',[$product['item']['id'],-1])}}"> - </a>
-                            </div>
-
                             {{--<div class="cart_quantity_button">--}}
-                                {{--<a class="cart_quantity_up" href="javascript:void(0)" data-route="{{url('cart?product_id=$item->id&increment=1')}}"> + </a>--}}
-                                {{--<input class="cart_quantity_input" type="text" name="quantity" value="{{$item->qty}}" autocomplete="off" size="2">--}}
-                                {{--<a class="cart_quantity_down" href="javascript:void(0)" data-route="{{url('cart?product_id=$item->id&decrease=1')}}"> - </a>--}}
+                                {{--<a class="cart_quantity_up" href="{{ route('update.quantity',[$product['item']['id'],1])}}" onclick="updateQty($product['item']['id'],1);"> + </a>--}}
+                                {{--<input class="cart_quantity_input" type="text" name="quantity" value="{{ $product['qty'] }}" autocomplete="off" size="2">--}}
+                                {{--<a class="cart_quantity_down" href="{{ route('update.quantity',[$product['item']['id'],-1])}}"> - </a>--}}
                             {{--</div>--}}
-                        </td>
+ <br>
+                            <div class="cart_quantity_button">
+                            <a class="cart_quantity_up" href="JavaScript:void(0);"  data-id="{{ $product['item']['id'] }}"> + </a>
+                            <input class="cart_quantity_input" type="text" name="quantity" value="{{ $product['qty'] }}" autocomplete="off" size="2" id="quantity{{$product['item']['id']}}">
+                            <a class="cart_quantity_down" href="JavaScript:void(0);"  data-id="{{ $product['item']['id'] }}"> - </a>
+                            </div>
                         </td>
                         <td class="cart_total">
                             {{--@php--}}
@@ -71,7 +62,7 @@
                     <td></td>
                     <td></td>
                     <td>Total</td>
-                    <td>{{ $totalPrice }}</td>
+                    <td id="totalPrice">{{ $totalPrice }}</td>
                     <td></td>
                 </tr>
                 </tbody>
@@ -168,15 +159,103 @@
 @endsection
 <script src="{{ asset('js/multipleImg3.2.1.min.js' )}}"></script>
 <script>
-//    $(document).ready(function () {
-        $(".quantity").on("click",function(){
-            alert( "Removing item with an id of " + $(this).data("id") );
+    $(document).ready(function () {
+        $('.cart_quantity_up').click(function() {
+            var id = $(this).data('id');
+            var quantity = $('#quantity' + id).val();
+            var price = $('#price' + id).val();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: '{{route("increase.quantity")}}',
+                method: 'POST',
+                data: {'id': id, 'quantity': quantity, "_token": "{{ csrf_token() }}"},
+                dataType:'json',
+                success: function (response) {
+                    alert(response);
+                    //var total = response.qty * response.item.price;
+                  //  $('#price'+response.item.id).val(response.price);
+                    $('#quantity'+response.id).val(response.qty);
+                    //alert(total);
+
+                }
+            });
         });
-//    })
+
+        $('.cart_quantity_down').click(function(){
+            var id = $(this).data('id');
+            var quantity = $('#quantity'+id).val();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '{{route("decrease.quantity") }}',
+                    method: 'POST',
+                    data: {'id': id, 'quantity': quantity, "_token": "{{ csrf_token() }}"},
+                    success:function(response){
+                        alert(response);
+//                        var total = response.qty * response.price;
+//                        alert(total);
+                    }
+                });
+
+
+                });
+    });
+
+
+//        $('.cart_quantity_up').click(function () {
+//            if ($(this).prev().val() < 3) {
+//                $(this).prev().val(+$(this).prev().val() + 1);
+//            }
+//        });
+//        $('.cart_quantity_down').click(function () {
+//            if ($(this).next().val() > 1) {
+//                if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
+//            }
+//        });
+
+
+//        calcula/te();
+//        $(".cart_quantity_up").click(function(){
+//            changeQuantity(+1);
+//            calculate();
+//        });
+//        $(".cart_quantity_down").click(function(){
+//            changeQuantity(-1);
+////            calculate();
+//        });
+
+//        $(":input[name='quantity']").keyup(function(e){
+//            if (e.keyCode == 38) changeQuantity(1);
+//            if (e.keyCode == 40) changeQuantity(-1);
+////            calculate();
+//        });
+
+//        $(".cart_quantity_up").on("click",function(){
+//
+//            var counter = $('.cart_quantity_input').val();
+//            alert(counter);
+//
+//            $('.cart_quantity_up').each(function() {
+//                var quantity = $(this).find('.cart_quantity_input').val();
+//                alert(quantity);
+////                var price = $(this).find(".po-price").val();
+////                subtotal += quantity * price;
+//            });
 
 
 
+
+//        });
 </script>
+
+
 <script>
     function changeItemQuantity( id , num ) { alert(num);
         var qty_id = $("#quantity").val(); alert(qty_id);

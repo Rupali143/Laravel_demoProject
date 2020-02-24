@@ -18,6 +18,7 @@ class ShoppingCartController extends Controller
         $cart = new Cart($oldCart);
         $cart->add($productDetails, $request->id);
         $request->session()->put('cart',$cart);
+
 //        $totalItems = Session::get('cart')->totalQty; dd($totalItems);
 //        dd($request->session()->get('cart'));
 //        return redirect()->route('cart.display');
@@ -29,8 +30,9 @@ class ShoppingCartController extends Controller
             return view('frontEnd.myCart');
         }else{
             $oldCart = Session::get('cart');
-            $cart = new Cart($oldCart); //dd($cart->item);
-            return view('frontEnd.myCart',['products'=>$cart->item,'totalPrice'=>$cart->totalPrice]);
+            //$cart = new Cart($oldCart); //dd($cart->item);
+//            dd($oldCart);
+            return view('frontEnd.myCart',['products'=>$oldCart->item,'totalPrice'=>$oldCart->totalPrice]);
         }
     }
 
@@ -41,7 +43,8 @@ class ShoppingCartController extends Controller
         return redirect()->back()->with('success', 'Product Deleted Successfully from Session.');
     }
 
-    public function updateQuantity($id,$val_id){
+
+    public function updateQuantity1($id,$val_id){
 //       dd(Session::get('cart')->item);
         foreach(Session::get('cart')->item as $item){
             $selectedQuantity = $item['qty'] + $val_id;
@@ -72,5 +75,85 @@ class ShoppingCartController extends Controller
             return redirect()->back()->with('success', 'Product Quantity Successfully updated.');
         }
 
+    }
+
+    public function increaseQuantity(Request $request){
+//        if($request->id !=null || $request->id !='') {
+//            $qty = $request->quantity+1;
+//            $id = $request->id;
+//            $sessionData = Session::get('cart');
+//
+//            if (array_key_exists($id, $sessionData->item)) {
+////                $actualQuantity = $sessionData->item[$id]['item']['quantity'];
+//                //if($actualQuantity < $sessionData->item[$id]['qty']) { echo'if';
+//                //dd($sessionData->item);
+//                    $sessionData->item[$id]['qty'] = $sessionData->item[$id]['qty'] + 1;
+//                    $sessionData->item[$id]['price'] = $sessionData->item[$id]['qty'] * $sessionData->item[$id]['item']['price'];
+//                    $request->session()->put('cart',$sessionData);
+//                //dd($sessionData);
+//                    return response()->json($sessionData);
+//            }
+//        }
+
+        if($request->id !=null || $request->id !='') {
+            $qty = $request->quantity+1;
+            $id = $request->id;
+            $sessionData = Session::get('cart');
+
+            if (array_key_exists($id, $sessionData->item)) {
+                $storedItem = $sessionData->item[$id];
+            }
+
+            $storedItem['qty']++;
+            $storedItem['price'] = $storedItem['item']['price'] * $storedItem['qty'];
+            $storedItem['totalQty'] = $storedItem['qty'] + 1;
+            $oldCart = Session::has('cart') ? Session::get('cart') : null;
+            $cart = new Cart($oldCart);
+            $cart->updateAdd($storedItem, $id);
+            $request->session()->put('cart',$cart);
+            return response()->json(['products'=>$cart->item,'totalPrice'=>$cart->totalPrice]);
+        }
+    }
+
+    public function decreaseQuantity1(Request $request)
+    {
+        if($request->id !=null || $request->id !='') {
+            $qty = $request->quantity-1;
+            $id = $request->id;
+
+            $sessionData = Session::get('cart');
+            //print_r($sessionData->item);
+            if (array_key_exists($id, $sessionData->item)) {
+                $sessionData->item[$id]['qty'] = $sessionData->item[$id]['qty'] - 1;
+                $sessionData->item[$id]['price'] = $sessionData->item[$id]['qty'] * $sessionData->item[$id]['item']['price'];
+                $request->session()->put('cart',$sessionData);
+//                print_r(json($sessionData));
+                return response()->json($sessionData);
+            }
+        }
+    }
+
+
+
+    public function decreaseQuantity(Request $request)
+    {
+        if($request->id !=null || $request->id !='') {
+            $qty = $request->quantity-1;
+            $id = $request->id;
+
+            $sessionData = Session::get('cart');
+            if (array_key_exists($id, $sessionData->item)) {
+                $storedItem = $sessionData->item[$id];
+            }
+
+            $storedItem['qty']++;
+            $storedItem['price'] = $storedItem['item']['price'] * $storedItem['qty'];
+            $storedItem['totalQty'] = $storedItem['qty'] - 1;
+            $oldCart = Session::has('cart') ? Session::get('cart') : null;
+            $cart = new Cart($oldCart);
+            $cart->updateMinus($storedItem, $id);
+            $request->session()->put('cart',$cart);
+            return response()->json(['products'=>$cart->item,'totalPrice'=>$cart->totalPrice]);
+        }
     }
 }

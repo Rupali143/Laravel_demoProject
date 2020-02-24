@@ -91,6 +91,8 @@ Route::get('displayProductsCart','Front\ShoppingCartController@displayProductsCa
 
 Route::get('removeProductFromCart/{id}','Front\ShoppingCartController@removeProductFromCart')->name('deleteSession.product');
 
-Route::get('updateQuantity/{id}/{val_id}','Front\ShoppingCartController@updateQuantity')->name('update.quantity');
+Route::post('increaseQuantity','Front\ShoppingCartController@increaseQuantity')->name('increase.quantity');
+
+Route::post('decreaseQuantity','Front\ShoppingCartController@decreaseQuantity')->name('decrease.quantity');
 
 

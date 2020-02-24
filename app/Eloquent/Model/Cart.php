@@ -27,18 +27,50 @@ class Cart extends Model
     }
 
     public function add($item,$id){
-        $storedItem = ['qty' => 0,'price' =>$item->price ,'item' => $item];
+        $storedItem = ['qty' => 0,'price' =>$item['price'] ,'item' => $item];
 
         if($this->item) {
             if (array_key_exists($id, $this->item)) {
                 $storedItem = $this->item[$id];
             }
         }
+//        dd($item);
 
-                $storedItem['qty']++;
-                $storedItem['price'] = $item->price * $storedItem['qty'];
+                $storedItem['qty']++;  //dd($item['price']);
+                $storedItem['price'] = $item['price'] * $storedItem['qty'];
                 $this->item[$id] = $storedItem;
                 $this->totalQty++;
-                $this->totalPrice += $item->price;
+                $this->totalPrice += $item['price']; //dd($this->totalPrice);
+
+    }
+
+    public function updateAdd($item,$id){
+        $storedItem = ['qty' => 0,'price' =>$item['price'] ,'item' => $item];
+        if($this->item) {
+            if (array_key_exists($id, $this->item)) {
+                $storedItem = $this->item[$id];
+            }
+        }
+//        dd($item);
+        $storedItem['qty']++; // dd($item['item']['price']);
+        $storedItem['price'] = $item['item']['price'] * $storedItem['qty'];
+        $this->item[$id] = $storedItem;
+        $this->totalQty++;
+        $this->totalPrice += $item['item']['price']; //dd($this->totalPrice);
+    }
+
+    public function updateMinus($item,$id){
+        $storedItem = ['qty' => 0,'price' =>$item['price'] ,'item' => $item];
+        if($this->item) {
+            if (array_key_exists($id, $this->item)) {
+                $storedItem = $this->item[$id];
+            }
+        }
+//        dd($item);
+        $storedItem['qty']--;
+        $storedItem['price'] = $item['item']['price'] * $storedItem['qty'];
+        $this->item[$id] = $storedItem;
+        $this->totalQty--;
+        $this->totalPrice -= $item['item']['price']; //dd($this->totalPrice);
     }
 }
