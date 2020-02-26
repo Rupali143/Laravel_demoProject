@@ -5,6 +5,7 @@
 @if(Session::has('cart'))
     <section id="cart_items">
         <div class="row table-responsive cart_info">
+            <p align="center" class="message" style='margin-top:20px;color:red;'></p>
             <table class="table table-condensed">
                 <thead>
                 <tr class="cart_menu">
@@ -30,29 +31,20 @@
                             <h4><a href="">{{ $product['item']['name'] }}</a></h4>
                         </td>
                         <td class="cart_price">
-                            <p id="price{{$product['item']['id']}}" value="{{ $product['price'] }}">{{ $product['price'] }}</p>
+                            <input type="text" id="price{{$product['item']['id']}}" value="{{ $product['price'] }}" style="border: none;" readonly>
                         </td>
                         <td class="cart_quantity">
-                            {{--<div class="cart_quantity_button">--}}
-                                {{--<a class="cart_quantity_up" href="{{ route('update.quantity',[$product['item']['id'],1])}}" onclick="updateQty($product['item']['id'],1);"> + </a>--}}
-                                {{--<input class="cart_quantity_input" type="text" name="quantity" value="{{ $product['qty'] }}" autocomplete="off" size="2">--}}
-                                {{--<a class="cart_quantity_down" href="{{ route('update.quantity',[$product['item']['id'],-1])}}"> - </a>--}}
-                            {{--</div>--}}
- <br>
+                            <p align="center" class="message{{$product['item']['id']}}" id="message{{$product['item']['id']}}" style='color:red;'></p>
                             <div class="cart_quantity_button">
                             <a class="cart_quantity_up" href="JavaScript:void(0);"  data-id="{{ $product['item']['id'] }}"> + </a>
-                            <input class="cart_quantity_input" type="text" name="quantity" value="{{ $product['qty'] }}" autocomplete="off" size="2" id="quantity{{$product['item']['id']}}">
+                            <input class="cart_quantity_input" type="text" name="quantity" value="{{ $product['qty'] }}" autocomplete="off" size="2" id="quantity{{$product['item']['id']}}" readonly>
                             <a class="cart_quantity_down" href="JavaScript:void(0);"  data-id="{{ $product['item']['id'] }}"> - </a>
                             </div>
                         </td>
                         <td class="cart_total">
-                            {{--@php--}}
-                            {{--$subTotal = 1 * $cartDetail->product_price;--}}
-                            {{--@endphp--}}
-                            {{--<p class="cart_total_price">{{ $subTotal }}</p>--}}
                         </td>
                         <td class="cart_delete">
-                            <a class="cart_quantity_delete" href="{{ route('deleteSession.product',[$product['item']['id']])}}"><i class="fa fa-times"></i></a>
+                            <a class="cart_quantity_delete btn-danger" type="button" href="{{ route('deleteSession.product',[$product['item']['id']])}}" style="background: red;"><i class="fa fa-times"></i></a>
                         </td>
                     </tr>
                 @endforeach
@@ -62,7 +54,7 @@
                     <td></td>
                     <td></td>
                     <td>Total</td>
-                    <td id="totalPrice">{{ $totalPrice }}</td>
+                    <td><input type="text" id="totalPrice" value="{{ $totalPrice }}"  style="border: none;" readonly></td>
                     <td></td>
                 </tr>
                 </tbody>
@@ -134,14 +126,14 @@
                 <div class="col-sm-6">
                     <div class="total_area">
                         <ul>
-                            <li>Cart Sub Total <span>{{ $totalPrice }}</span></li>
+                            <li>Cart Sub Total <input type="text" class="pull-right" id="totalprice1" value="{{ $totalPrice }}"  style="border: none;" readonly></li>
                             <li>Eco Tax <span>2 %</span></li>
                             {{--<li>Shipping Cost <span>Free</span></li>--}}
                             @php
                             $totalWithTax = $totalPrice + $totalPrice * (0.02)
                             @endphp
 
-                            <li>Total <span>{{ $totalWithTax }}</span></li>
+                            <li>Total <input type="text" id="totalWithTax" class="pull-right" value="{{ $totalWithTax }}" style="border: none;" readonly></li>
                         </ul>
                         <a class="btn btn-default update" href="">Update</a>
                         <a class="btn btn-default check_out" href="">Check Out</a>
@@ -175,12 +167,26 @@
                 data: {'id': id, 'quantity': quantity, "_token": "{{ csrf_token() }}"},
                 dataType:'json',
                 success: function (response) {
-                    alert(response);
-                    //var total = response.qty * response.item.price;
-                  //  $('#price'+response.item.id).val(response.price);
-                    $('#quantity'+response.id).val(response.qty);
-                    //alert(total);
+                    //console.log(response.totalPrice);
 
+                    //console.log(totalWithTax);
+                    if(response.status == false){
+                        $('.message'+response.id).text(response.message);
+                    }else {
+                        $.each(response.products, function (i, item) { //console.log(item.price);
+                            //console.log('id ',i);
+                           // console.log('item ',item.price);
+                            $('#price' + i).val(item.price);
+                            $('#quantity' + i).val(item.qty);
+                        });
+                        $('#totalPrice').val(parseFloat(response.totalPrice).toFixed(2));
+                        $('#totalprice1').val(parseFloat(response.totalPrice).toFixed(2));
+                        var totalPrice = response.totalPrice;
+                        var totalWithTax = totalPrice+totalPrice* 0.02;
+                        var num = parseFloat(totalWithTax).toFixed(2);
+                        $('#totalWithTax').val(num);
+
+                    }
                 }
             });
         });
@@ -198,73 +204,27 @@
                     method: 'POST',
                     data: {'id': id, 'quantity': quantity, "_token": "{{ csrf_token() }}"},
                     success:function(response){
-                        alert(response);
-//                        var total = response.qty * response.price;
-//                        alert(total);
+                        //alert(response.products);
+
+                        if(response.status == false){
+                            $('.message'+response.id).text(response.message);
+                        }else {
+                            $.each(response.products, function (i, item) { //alert(i);
+                                $('#price' + i).val(item.price);
+                                $('#quantity' + i).val(item.qty);
+                            });
+                            $('#totalPrice').val(parseFloat(response.totalPrice).toFixed(2));
+                            $('#totalprice1').val(parseFloat(response.totalPrice).toFixed(2));
+                            var totalPrice = response.totalPrice;
+                            var totalWithTax = totalPrice+totalPrice* 0.02;
+                            var num = parseFloat(totalWithTax).toFixed(2);
+                            $('#totalWithTax').val(num);
+                        }
                     }
                 });
 
-
                 });
     });
-
-
-//        $('.cart_quantity_up').click(function () {
-//            if ($(this).prev().val() < 3) {
-//                $(this).prev().val(+$(this).prev().val() + 1);
-//            }
-//        });
-//        $('.cart_quantity_down').click(function () {
-//            if ($(this).next().val() > 1) {
-//                if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
-//            }
-//        });
-
-
-//        calcula/te();
-//        $(".cart_quantity_up").click(function(){
-//            changeQuantity(+1);
-//            calculate();
-//        });
-//        $(".cart_quantity_down").click(function(){
-//            changeQuantity(-1);
-////            calculate();
-//        });
-
-//        $(":input[name='quantity']").keyup(function(e){
-//            if (e.keyCode == 38) changeQuantity(1);
-//            if (e.keyCode == 40) changeQuantity(-1);
-////            calculate();
-//        });
-
-//        $(".cart_quantity_up").on("click",function(){
-//
-//            var counter = $('.cart_quantity_input').val();
-//            alert(counter);
-//
-//            $('.cart_quantity_up').each(function() {
-//                var quantity = $(this).find('.cart_quantity_input').val();
-//                alert(quantity);
-////                var price = $(this).find(".po-price").val();
-////                subtotal += quantity * price;
-//            });
-
-
-
-
-//        });
 </script>
 
-
-<script>
-    function changeItemQuantity( id , num ) { alert(num);
-        var qty_id = $("#quantity").val(); alert(qty_id);
-        var currentVal = parseInt( $(qty_id).value );
-        if ( currentVal != NaN )
-        {
-            $(qty_id).value = currentVal + num;
-//            $("products-table-basket").val();
-        }
-    }
-    </script>
 

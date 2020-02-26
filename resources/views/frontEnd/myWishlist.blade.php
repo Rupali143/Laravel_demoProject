@@ -15,14 +15,14 @@
                                     <img src="/uploads/products/{{ $favourite->productImages[0]->images }}" alt="" value="{{ $favourite->productImages[0]->product_id}}" width="100px;" height="150px;"/>
                                     <h2>$56</h2>
                                     <p></p>
-                                    <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                                    <a href="{{ route('cart.add',[$favourite->productImages[0]->product_id]) }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
 
                                 </div>
                                 <div class="product-overlay">
                                     <div class="overlay-content">
                                         <h2>$56</h2>
                                         <p></p>
-                                        <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                                        <a href="{{ route('cart.add',[$favourite->productImages[0]->product_id]) }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
                                     </div>
                                 </div>
                             </div>

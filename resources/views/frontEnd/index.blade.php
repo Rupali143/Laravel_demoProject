@@ -150,13 +150,13 @@
                                  <p>{{ $product->name }}</p>
                                  <a href="{{ route('cart.add',[$product->image[0]->product_id]) }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
                              </div>
-                             {{--<div class="product-overlay">--}}
-                                 {{--<div class="overlay-content">--}}
-                                     {{--<h2>{{ $product->price }} /-</h2>--}}
-                                     {{--<p>{{ $product->name }}</p>--}}
-                                     {{--<a href="{{ route('cart.add',[$product->image[0]->product_id]) }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>--}}
-                                 {{--</div>--}}
-                             {{--</div>--}}
+                             <div class="product-overlay">
+                                 <div class="overlay-content">
+                                     <h2>{{ $product->price }} /-</h2>
+                                     <p>{{ $product->name }}</p>
+                                     <a href="{{ route('cart.add',[$product->image[0]->product_id]) }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                                 </div>
+                             </div>
                           </div>
                          <div class="choose">
                              <ul class="nav nav-pills nav-justified">
