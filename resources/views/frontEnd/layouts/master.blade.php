@@ -16,6 +16,7 @@
     <!--[if lt IE 9]>
     <script src="{{asset('frontEnd/js/html5shiv.js')}}"></script>
     <script src="{{asset('frontEnd/js/respond.min.js')}}"></script>
+    <script src="https://js.stripe.com/v3/"></script>
     <![endif]-->
     <link rel="shortcut icon" href="images/ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{asset('frontEnd')}}">
@@ -75,5 +76,7 @@
 <script src="{{asset('frontEnd/js/price-range.js')}}"></script>
 <script src="{{asset('frontEnd/js/jquery.prettyPhoto.js')}}"></script>
 <script src="{{asset('frontEnd/js/main.js')}}"></script>
+@yield('scripts')
+
 </body>
 </html>

@@ -3,7 +3,7 @@
 
 @section('main-content')
 @if(Session::has('cart'))
-    @if(count($products) > 0)
+    {{--@if(count($products) > 0)--}}
     <section id="cart_items">
         <div class="row table-responsive cart_info">
             <p align="center" class="message" style='margin-top:20px;color:red;'></p>
@@ -20,9 +20,8 @@
                 </tr>
                 </thead>
                 <tbody>
-
+                @if(count($products) > 0)
                 @foreach($products as $product)
-                    {{--@dd($product['item']['price'])--}}
                     <tr>
                         <td class="cart_product">
                             <a href=""><img src="/uploads/products/{{ $product['item']['image'][0]['images'] }}" alt="" height="80px;" width="80px;"></a>
@@ -59,7 +58,7 @@
                     <td></td>
                 </tr>
                 @else
-                        <tr><td>No Items in Cart!!!</td></tr>
+                        <tr><td><strong>No Items in Cart!!!</strong></td></tr>
                 @endif
 
                 </tbody>
@@ -166,8 +165,11 @@
                 success: function (response) {
                     if(response.status == false){
                         //$('.message'+response.id).text(response.message);
-                        $('.message'+response.id).text(response.message).fadeTo(1000,0);
-//                        fadeOut(function () {$(this).css("display", "block")});
+//                        $('.message'+response.id).text(response.message).fadeTo(1000,0);
+                        $('.message'+response.id).fadeIn().html(response.message);
+                        setTimeout(function() {
+                            $('.message'+response.id).fadeOut("slow");
+                        }, 2000 );
                         $('.cart_quantity_up'+response.id).attr("disabled","disabled");
                     }else {
                         $.each(response.products, function (i, item) {
@@ -200,8 +202,12 @@
                     data: {'id': id, 'quantity': quantity, "_token": "{{ csrf_token() }}"},
                     success:function(response){
                         if(response.status == false){
+                            $('.message'+response.id).fadeIn().html(response.message);
+                            setTimeout(function() {
+                                $('.message'+response.id).fadeOut("slow");
+                            }, 2000 );
                             $('.cart_quantity_down'+response.id).attr("disabled","disabled");
-                             $('.message'+response.id).text(response.message).delay(2000).fadeOut();
+//                             $('.message'+response.id).text(response.message).delay(2000).fadeOut();
                         }else {
                             $.each(response.products, function (i, item) {
                                // $('#price' + i).val(item.price);

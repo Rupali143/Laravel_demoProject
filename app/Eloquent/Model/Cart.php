@@ -41,49 +41,5 @@ class Cart extends Model
                 $this->totalQty++;
                 $this->totalPrice += $item['price'];
     }
-
-//    public function updateAdd($item,$id){
-//        $storedItem = ['qty' => 0,'price' =>$item['price'] ,'item' => $item];
-//        if($this->item) {
-//            if (array_key_exists($id, $this->item)) {
-//                $storedItem = $this->item[$id];
-//            }
-//        }
-//        $storedItem['qty']++;
-//        $storedItem['price'] = $item['item']['price'] * $storedItem['qty'];
-//        $this->item[$id] = $storedItem;
-//        $this->totalQty++;
-//        $this->totalPrice += $item['item']['price'];
-//    }
-
-//    public function updateMinus($item,$id){
-//        $storedItem = ['qty' => 0,'price' =>$item['price'] ,'item' => $item];
-//        if($this->item) {
-//            if (array_key_exists($id, $this->item)) {
-//                $storedItem = $this->item[$id];
-//            }
-//        }
-//        $storedItem['qty']--;
-//        $storedItem['price'] = $item['item']['price'] * $storedItem['qty'];
-//        $this->item[$id] = $storedItem;
-//        $this->totalQty--;
-//        $this->totalPrice -= $item['item']['price'];
-//    }
-
-
-    public function afterDelete($item,$id){
-        $storedItem = ['qty' => 0,'price' =>$item['price'] ,'item' => $item];
-
-        if($this->item) {
-            if (array_key_exists($id, $this->item)) {
-                $storedItem = $this->item[$id];
-            }
-        }
-        $afterDeleteAmount = $item->totalPrice - $storedItem['price'];
-        $afterDeleteQuantity = $item->totalQty - $storedItem['qty'];
-        //dd($afterDeleteQuantity);
-        $this->totalQty = $afterDeleteQuantity;
-        $this->totalPrice = $afterDeleteAmount;
-
-    }
+    
 }
