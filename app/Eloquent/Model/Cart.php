@@ -26,7 +26,7 @@ class Cart extends Model
     }
 
     public function add($item,$id){
-        $storedItem = ['qty' => 0,'price' =>$item['price'] ,'item' => $item];
+        $storedItem = ['qty' => 0,'price' =>$item['price'] ,'item' => $item,'totalProduct' => 0];
 
         if($this->item) {
             if (array_key_exists($id, $this->item)) {
@@ -36,38 +36,39 @@ class Cart extends Model
 
                 $storedItem['qty']++;
                 $storedItem['price'] = $item['price'] * $storedItem['qty'];
+                //$storedItem['totalProduct'] = count($this->item);
                 $this->item[$id] = $storedItem;
                 $this->totalQty++;
                 $this->totalPrice += $item['price'];
     }
 
-    public function updateAdd($item,$id){
-        $storedItem = ['qty' => 0,'price' =>$item['price'] ,'item' => $item];
-        if($this->item) {
-            if (array_key_exists($id, $this->item)) {
-                $storedItem = $this->item[$id];
-            }
-        }
-        $storedItem['qty']++;
-        $storedItem['price'] = $item['item']['price'] * $storedItem['qty'];
-        $this->item[$id] = $storedItem;
-        $this->totalQty++;
-        $this->totalPrice += $item['item']['price'];
-    }
+//    public function updateAdd($item,$id){
+//        $storedItem = ['qty' => 0,'price' =>$item['price'] ,'item' => $item];
+//        if($this->item) {
+//            if (array_key_exists($id, $this->item)) {
+//                $storedItem = $this->item[$id];
+//            }
+//        }
+//        $storedItem['qty']++;
+//        $storedItem['price'] = $item['item']['price'] * $storedItem['qty'];
+//        $this->item[$id] = $storedItem;
+//        $this->totalQty++;
+//        $this->totalPrice += $item['item']['price'];
+//    }
 
-    public function updateMinus($item,$id){
-        $storedItem = ['qty' => 0,'price' =>$item['price'] ,'item' => $item];
-        if($this->item) {
-            if (array_key_exists($id, $this->item)) {
-                $storedItem = $this->item[$id];
-            }
-        }
-        $storedItem['qty']--;
-        $storedItem['price'] = $item['item']['price'] * $storedItem['qty'];
-        $this->item[$id] = $storedItem;
-        $this->totalQty--;
-        $this->totalPrice -= $item['item']['price'];
-    }
+//    public function updateMinus($item,$id){
+//        $storedItem = ['qty' => 0,'price' =>$item['price'] ,'item' => $item];
+//        if($this->item) {
+//            if (array_key_exists($id, $this->item)) {
+//                $storedItem = $this->item[$id];
+//            }
+//        }
+//        $storedItem['qty']--;
+//        $storedItem['price'] = $item['item']['price'] * $storedItem['qty'];
+//        $this->item[$id] = $storedItem;
+//        $this->totalQty--;
+//        $this->totalPrice -= $item['item']['price'];
+//    }
 
 
     public function afterDelete($item,$id){

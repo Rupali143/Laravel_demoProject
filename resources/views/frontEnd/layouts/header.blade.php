@@ -41,18 +41,13 @@
                                 <li><a href="{{ url('/')}}"><i class="fa fa-user"></i> Home</a></li>
                                 <li><a href="{{ route('profileDisplay')}}"><i class="fa fa-user"></i> My Account</a></li>
                                 <li><a href="{{ route('myWishList') }}"><i class="fa fa-heart"></i>My WishList</a></li>
-                                <li><a href="{{ route('cart.display') }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i> My cart <span class="badge" style="color: black;">{{Session::has('cart') ? Session::get('cart')->totalQty : ''}}</span></a>
+                                <li><a href="{{ route('cart.display') }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i> My cart <span class="badge" style="color: black;">
+                                            {{ Session::has('cart') ? count(Session::get('cart')->item) : ''}}
+                                        </span></a>
 
                                 </li>
                                 <li><a href="{{ route('changePassword')}}"><i class="fa fa-key"></i> Change Password</a></li>
-                                {{--<ul class="nav navbar-nav collapse navbar-collapse">--}}
-                                    {{--<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>--}}
-                                        {{--<ul role="menu" class="sub-menu">--}}
-                                            {{--<li><a href="shop.html">Products</a></li>--}}
-                                            {{--<li><a href="product-details.html">Product Details</a></li>--}}
-                                        {{--</ul>--}}
-                                    {{--</li>--}}
-                                    {{--</ul>--}}
+
                             <li><a href="{{ url('logout') }}"><i class="fa fa-lock"></i> Logout</a></li>
                             @else
                                 <li><a href="{{ route('auth.google') }}"><i class="fa fa-google-plus"></i></a></li>

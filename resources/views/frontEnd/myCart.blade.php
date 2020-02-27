@@ -3,6 +3,7 @@
 
 @section('main-content')
 @if(Session::has('cart'))
+    @if(count($products) > 0)
     <section id="cart_items">
         <div class="row table-responsive cart_info">
             <p align="center" class="message" style='margin-top:20px;color:red;'></p>
@@ -13,7 +14,6 @@
                     <td class="description">Product Name</td>
                     <td class="price">Price</td>
                     <td class="quantity">Quantity</td>
-                    {{--<td class="total">SubTotal</td>--}}
                     <td></td>
                     <td>Action</td>
                     <td></td>
@@ -22,7 +22,7 @@
                 <tbody>
 
                 @foreach($products as $product)
-                    {{--@dd($product['item']['id'])--}}
+                    {{--@dd($product['item']['price'])--}}
                     <tr>
                         <td class="cart_product">
                             <a href=""><img src="/uploads/products/{{ $product['item']['image'][0]['images'] }}" alt="" height="80px;" width="80px;"></a>
@@ -31,7 +31,8 @@
                             <h4><a href="">{{ $product['item']['name'] }}</a></h4>
                         </td>
                         <td class="cart_price">
-                            <input type="text" id="price{{$product['item']['id']}}" value="{{ $product['price'] }}" style="border: none;" readonly>
+                            {{--id="price{{$product['item']['id']}}$product['price'] --}}
+                            <input type="text" value="{{ $product['item']['price'] }}" style="border: none;" readonly>
                         </td>
                         <td class="cart_quantity">
                             <p align="center" class="message{{$product['item']['id']}}" id="message{{$product['item']['id']}}" style='color:red;'></p>
@@ -57,6 +58,10 @@
                     <td><input type="text" id="totalPrice" value="{{ $totalPrice }}"  style="border: none;" readonly></td>
                     <td></td>
                 </tr>
+                @else
+                        <tr><td>No Items in Cart!!!</td></tr>
+                @endif
+
                 </tbody>
             </table>
 
@@ -128,25 +133,17 @@
                         <ul>
                             <li>Cart Sub Total <input type="text" class="pull-right" id="totalprice1" value="{{ $totalPrice }}"  style="border: none;" readonly></li>
                             <li>Eco Tax <span>2 %</span></li>
-                            {{--<li>Shipping Cost <span>Free</span></li>--}}
                             @php
                             $totalWithTax = $totalPrice + $totalPrice * (0.02)
                             @endphp
-
                             <li>Total <input type="text" id="totalWithTax" class="pull-right" value="{{ $totalWithTax }}" style="border: none;" readonly></li>
                         </ul>
-                        <a class="btn btn-default update" href="">Update</a>
-                        <a class="btn btn-default check_out" href="">Check Out</a>
+                        <a class="btn btn-default check_out" href="{{ route('get.checkout') }}">Check Out</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-@else
-    <div class="row">
-        <h2>No Items in Cart!!!</h2>
-    </div>
-
 @endif
 @endsection
 <script src="{{ asset('js/multipleImg3.2.1.min.js' )}}"></script>
@@ -155,7 +152,7 @@
         $('.cart_quantity_up').click(function() {
             var id = $(this).data('id');
             var quantity = $('#quantity' + id).val();
-            var price = $('#price' + id).val();
+           // var price = $('#price' + id).val();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -167,16 +164,14 @@
                 data: {'id': id, 'quantity': quantity, "_token": "{{ csrf_token() }}"},
                 dataType:'json',
                 success: function (response) {
-                    //console.log(response.totalPrice);
-
-                    //console.log(totalWithTax);
                     if(response.status == false){
-                        $('.message'+response.id).text(response.message);
+                        //$('.message'+response.id).text(response.message);
+                        $('.message'+response.id).text(response.message).fadeTo(1000,0);
+//                        fadeOut(function () {$(this).css("display", "block")});
+                        $('.cart_quantity_up'+response.id).attr("disabled","disabled");
                     }else {
-                        $.each(response.products, function (i, item) { //console.log(item.price);
-                            //console.log('id ',i);
-                           // console.log('item ',item.price);
-                            $('#price' + i).val(item.price);
+                        $.each(response.products, function (i, item) {
+                           // $('#price' + i).val(item.price);
                             $('#quantity' + i).val(item.qty);
                         });
                         $('#totalPrice').val(parseFloat(response.totalPrice).toFixed(2));
@@ -204,13 +199,12 @@
                     method: 'POST',
                     data: {'id': id, 'quantity': quantity, "_token": "{{ csrf_token() }}"},
                     success:function(response){
-                        //alert(response.products);
-
                         if(response.status == false){
-                            $('.message'+response.id).text(response.message);
+                            $('.cart_quantity_down'+response.id).attr("disabled","disabled");
+                             $('.message'+response.id).text(response.message).delay(2000).fadeOut();
                         }else {
-                            $.each(response.products, function (i, item) { //alert(i);
-                                $('#price' + i).val(item.price);
+                            $.each(response.products, function (i, item) {
+                               // $('#price' + i).val(item.price);
                                 $('#quantity' + i).val(item.qty);
                             });
                             $('#totalPrice').val(parseFloat(response.totalPrice).toFixed(2));

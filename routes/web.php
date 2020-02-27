@@ -95,4 +95,7 @@ Route::post('increaseQuantity','Front\ShoppingCartController@increaseQuantity')-
 
 Route::post('decreaseQuantity','Front\ShoppingCartController@decreaseQuantity')->name('decrease.quantity');
 
+Route::get('checkout','Front\ShoppingCartController@getCheckout')->name('get.checkout');
+
+Route::post('checkoutPost','Front\ShoppingCartController@checkoutPost')->name('post.checkout');
 
