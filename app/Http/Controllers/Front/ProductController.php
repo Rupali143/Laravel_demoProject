@@ -52,7 +52,9 @@ class ProductController extends Controller
     public function displayWishList(){
         $customerId = \Auth::user()->id;
         $favourites = Favourite::with('productImages')->where('customer_id',$customerId)->paginate(3);
-        return view('frontEnd.myWishlist',compact('favourites'));
+//        dd($favourites);
+        $products = Favourite::with('product')->get();
+        return view('frontEnd.myWishlist',compact('favourites','products'));
     }
 
 

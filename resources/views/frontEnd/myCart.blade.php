@@ -1,6 +1,9 @@
 @extends('frontEnd/layouts/master')
-
-
+<style>
+    .cart_info table tr td {
+        margin: 20px;
+    }
+    </style>
 @section('main-content')
 @if(Session::has('cart'))
     {{--@if(count($products) > 0)--}}
@@ -9,13 +12,21 @@
             <p align="center" class="message" style='margin-top:20px;color:red;'></p>
             <table class="table table-condensed">
                 <thead>
+                {{--<tr class="cart_menu">--}}
+                    {{--<td class="image">Product Image</td>--}}
+                    {{--<td class="description">Product Name</td>--}}
+                    {{--<td class="price">Price</td>--}}
+                    {{--<td class="quantity">Quantity</td>--}}
+                    {{--<td>Total</td>--}}
+                    {{--<td></td>--}}
+                    {{--<td></td>--}}
+                {{--</tr>--}}
                 <tr class="cart_menu">
-                    <td class="image">Product Image</td>
-                    <td class="description">Product Name</td>
+                    <td class="image">Item</td>
+                    <td class="description"></td>
                     <td class="price">Price</td>
                     <td class="quantity">Quantity</td>
-                    <td></td>
-                    <td>Action</td>
+                    <td class="total">Total</td>
                     <td></td>
                 </tr>
                 </thead>
@@ -42,11 +53,13 @@
                             </div>
                         </td>
                         <td class="cart_total">
+                            <h4><input type="text" id="price{{$product['item']['id']}}" value="{{ $product['price'] }}" style="border: none;" readonly></h4>
                         </td>
                         <td class="cart_delete">
-                            <a class="cart_quantity_delete btn-danger" type="button" href="{{ route('deleteSession.product',[$product['item']['id']])}}" style="background: red;"><i class="fa fa-times"></i></a>
+                            <a class="cart_quantity_delete" href="{{ route('deleteSession.product',[$product['item']['id']])}}"><i class="fa fa-times"></i></a>
                         </td>
                     </tr>
+
                 @endforeach
                 <tr>
                     <td></td>
@@ -137,7 +150,7 @@
                             @endphp
                             <li>Total <input type="text" id="totalWithTax" class="pull-right" value="{{ $totalWithTax }}" style="border: none;" readonly></li>
                         </ul>
-                        <a class="btn btn-default check_out" href="{{ route('get.checkout') }}">Check Out</a>
+                        <a class="btn btn-default check_out" href="{{ route('fetch.checkout') }}">Check Out</a>
                     </div>
                 </div>
             </div>
@@ -151,7 +164,6 @@
         $('.cart_quantity_up').click(function() {
             var id = $(this).data('id');
             var quantity = $('#quantity' + id).val();
-           // var price = $('#price' + id).val();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -164,8 +176,6 @@
                 dataType:'json',
                 success: function (response) {
                     if(response.status == false){
-                        //$('.message'+response.id).text(response.message);
-//                        $('.message'+response.id).text(response.message).fadeTo(1000,0);
                         $('.message'+response.id).fadeIn().html(response.message);
                         setTimeout(function() {
                             $('.message'+response.id).fadeOut("slow");
@@ -173,7 +183,7 @@
                         $('.cart_quantity_up'+response.id).attr("disabled","disabled");
                     }else {
                         $.each(response.products, function (i, item) {
-                           // $('#price' + i).val(item.price);
+                            $('#price' + i).val(item.price);
                             $('#quantity' + i).val(item.qty);
                         });
                         $('#totalPrice').val(parseFloat(response.totalPrice).toFixed(2));
@@ -210,7 +220,7 @@
 //                             $('.message'+response.id).text(response.message).delay(2000).fadeOut();
                         }else {
                             $.each(response.products, function (i, item) {
-                               // $('#price' + i).val(item.price);
+                                $('#price' + i).val(item.price);
                                 $('#quantity' + i).val(item.qty);
                             });
                             $('#totalPrice').val(parseFloat(response.totalPrice).toFixed(2));

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Eloquent\Model\Product;
 use App\Eloquent\Model\Cart;
+use App\Eloquent\Model\Cart_product;
+use App\Eloquent\Model\Order;
 use Session;
 use Charge;
 use Stripe;
@@ -38,7 +40,7 @@ class ShoppingCartController extends Controller
             return view('frontEnd.myCart',['products'=>$cartItem,'totalPrice'=> $grandTotal]);
     }
 
-    //removed product from sesion cart
+    //removed product from session cart
     public function removeProductFromCart($id){
         $cart = Session::get('cart');
         $storedItem = $cart->item[$id];
@@ -98,48 +100,63 @@ class ShoppingCartController extends Controller
             return view('frontEnd.checkout',['products'=>$oldCart->item,'total' => $total,'totalPrice'=>$oldCart->totalPrice]);
         }
     }
+    //Place oder page view
+    public function placeOrder(){
+        return view('frontEnd.placeOrder');
+    }
 
-    public function checkoutPost(Request $request){;
+    // After place order go to the payment page then save to the database table
+    public function checkoutPost(Request $request){
         if(!Session::has('cart')){
             return view('frontEnd.myCart');
         }else {
             $oldCart = Session::get('cart');
+            $userId = \Auth::user()->id;
             $totalWithTax = $oldCart->totalPrice + $oldCart->totalPrice* 0.02;
             $total = number_format($totalWithTax, 2);
-            //dd($totalWithTax);
+            $dyanamicId = "order".'_'.$userId;
+            $timestampId = $dyanamicId.'_'.time();
+//            dd($unique);
             $token = $request->input('stripeToken');
-
-//            Stripe::setApiKey(env('STRIPE_SECRET'));
-//            Charge::create ([
-//                "amount" => $total,
-//                "currency" => "INR",
-//                "source" => $request->input('stripeToken'),
-//                "description" => "Test payment from itsolutionstuff.com."
-//            ]);
-
-            //return redirect('/')->with('success','Successfuly Purchased');
             Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
-            Stripe\Charge::create ([
-                "amount" => $totalWithTax,
-                "currency" => "INR",
-                "source" => $token,
-                "description" => "Test payment"
-            ]);
-            return redirect('/')->with('success','Successfuly Purchased');
-//            Stripe::setApiKey(env('STRIPE_SECRET'));
-//            try{
-//                Charge::create(array(
-//                    "amount" => $total,
-//                    "currency" => "INR",
-//                    "source" => $request->input('stripeToken'),
-//                    "description" => "Test Charge"
-//                ));
-//
-//            }catch (\Exception $e){
-//                return redirect()->route('get.checkout')->with('error',$e->getMessage());
-//            }
-//            Session::forgot('cart');
-//            return redirect('/')->with('success','Successfuly Purchased');
+            try{
+                $charge = Stripe\Charge::create ([
+                    "amount" => $totalWithTax * 100,
+                    "currency" => "INR",
+                    "source" => $token,
+                    "description" => "Test payment"
+                ]);
+                $order = new Order();
+                $order->user_id = $userId;
+                $order->name = $request->input('fullName');
+                $order->address = $request->input('address');
+                $order->payment_id = $charge->id;
+                $order->transaction_status = 1;
+                $order->order_timestampID = $timestampId;
+                $order->total_amount = $total;
+                $order->save();
+                $orderId = $order->id;
+                foreach ($oldCart->item as $products){
+                    $cartProduct = new Cart_product();
+                    $cartProduct->product_id = $products['item']['id'];
+                    $cartProduct->quantity = $products['qty'];
+                    $cartProduct->price = $products['item']['price'];
+                    $cartProduct->order_id = $orderId;
+                    $cartProduct->save();
+                }
+
+            }catch (\Exception $e){
+                return redirect()->route('my.order')->with('error',$e->getMessage());
+            }
+            session()->forget('cart');
+            //return redirect()->back()->with('success', 'Product Successfully Purchased.');
+            return redirect()->route('my.order')->with('success', 'Product Successfully Purchased.');
         }
     }
+
+    public function myOrderProduct(){
+        return view('frontEnd.myCartProducts');
+    }
+
+
 }

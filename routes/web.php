@@ -95,7 +95,13 @@ Route::post('increaseQuantity','Front\ShoppingCartController@increaseQuantity')-
 
 Route::post('decreaseQuantity','Front\ShoppingCartController@decreaseQuantity')->name('decrease.quantity');
 
-Route::get('checkout','Front\ShoppingCartController@getCheckout')->name('get.checkout');
+Route::get('checkout','Front\ShoppingCartController@getCheckout')->name('fetch.checkout');
 
-Route::post('checkoutPost','Front\ShoppingCartController@checkoutPost')->name('post1.checkout');
+Route::post('checkoutPost','Front\ShoppingCartController@checkoutPost')->name('post.checkout');
+
+Route::get('placeOrder','Front\ShoppingCartController@placeOrder')->name('place.order');
+
+Route::get('myOrderProduct','Front\ShoppingCartController@myOrderProduct')->name('my.order');
+
+
 
