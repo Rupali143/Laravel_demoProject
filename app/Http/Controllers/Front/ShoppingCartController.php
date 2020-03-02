@@ -135,6 +135,8 @@ class ShoppingCartController extends Controller
                 $order->order_timestampID = $timestampId;
                 $order->total_amount = $total;
                 $order->save();
+                $orderTimestampID= $order->order_timestampID;
+                //dd($orderTimestampID);
                 $orderId = $order->id;
                 foreach ($oldCart->item as $products){
                     $cartProduct = new Cart_product();
@@ -149,13 +151,21 @@ class ShoppingCartController extends Controller
                 return redirect()->route('my.order')->with('error',$e->getMessage());
             }
             session()->forget('cart');
-            //return redirect()->back()->with('success', 'Product Successfully Purchased.');
-            return redirect()->route('my.order')->with('success', 'Product Successfully Purchased.');
+            return redirect()->route('my.order')->with('success', 'Product Successfully Purchased. Your order id is:-  '.$orderTimestampID);
         }
     }
 
     public function myOrderProduct(){
-        return view('frontEnd.myCartProducts');
+        $userId = \Auth::user()->id;
+//        $products = Cart_product::with('orders')->where('user_id',$userId)->paginate(4);
+//        $products = Cart_product::with('product','image','orders')->where('user_id',$userId)->get();
+//       // $orders= Cart_product::with('orders')->get();
+//        $orders= Cart_product::with('orders')->where('user_id',$userId)->get();
+////        $cartProduct = Cart_product::all();
+//        dd($orders);
+        $products = Order::with('cartProducts','cartProducts.image')->where('user_id',$userId)->paginate(2);
+//        dd($products);
+        return view('frontEnd.myCartProducts',compact('products'));
     }
 
 

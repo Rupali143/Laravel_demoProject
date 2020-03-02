@@ -9,6 +9,7 @@ use App\Eloquent\Model\Product_image;
 use DB;
 use App\Eloquent\Model\Sub_categories;
 use Illuminate\Support\Facades\Redirect;
+use App\Eloquent\Model\Order;
 
 
 class ProductController extends Controller
@@ -226,5 +227,34 @@ class ProductController extends Controller
 //        Project::where('project_active', 1)->lists('id','project_name');
 //        dd($subcategories);
 //        return json_encode($subcategories);
+    }
+
+    public function usersCart(Request $request){
+        $products = Order::with('cartProducts','cartProducts.product')->get();
+       // dd($products);
+
+       // dd($request->input('userName'));
+        if (isset($request->userName)) { //echo'hello';die;
+//            $products = $products->where('name','LIKE', '%'.$request->input('userName').'%');
+            $products =  Order::with('cartProducts')->where('name','LIKE',$request->input('userName').'%')->paginate(3);
+        }
+//        dd($products);
+//        if (isset($request->status)) {
+//            $products = $products->where('status', $request->input('status'));
+//        }
+//        if (isset($request->category_id)) {
+//            $products = $products->where('category_id', $request->input('category_id'));
+//        }
+//        $products = $products->paginate(3);
+//
+//        return view('products.index', compact('products', 'category','request'));
+
+//        $products = Order::with('cartProducts')->get();
+//        dd($products);
+        return view('usersCart',compact('products'));
+    }
+
+    public function cartDetails($id){
+        dd($id);
     }
 }

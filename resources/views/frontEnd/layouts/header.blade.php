@@ -41,6 +41,7 @@
                                 <li><a href="{{ url('/')}}"><i class="fa fa-user"></i> Home</a></li>
                                 <li><a href="{{ route('profileDisplay')}}"><i class="fa fa-user"></i> My Account</a></li>
                                 <li><a href="{{ route('myWishList') }}"><i class="fa fa-heart"></i>My WishList</a></li>
+                                <li><a href="{{ route('my.order') }}"><i class="fa fa-heart"></i>My Order</a></li>
                                 <li><a href="{{ route('cart.display') }}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i> My cart <span class="badge" style="color: black;">
                                             {{ Session::has('cart') ? count(Session::get('cart')->item) : ''}}
                                         </span></a>

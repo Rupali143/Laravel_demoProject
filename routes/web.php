@@ -43,6 +43,11 @@ Route::resource('subcategory','SubCategoryController');
 
 Route::get('fetch_subCategory/{id}','ProductController@fetchsubCategory')->name('fetch_subCategory');
 
+Route::get('usersCart','ProductController@usersCart')->name('users.cart');
+
+Route::get('cartDetails/{id}','ProductController@cartDetails')->name('users.cartDetails');
+
+
 
 Route::middleware(['admin'])->group(function () {
 

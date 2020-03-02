@@ -101,7 +101,7 @@
                                     </label>
                                 </div>
                                 <div class="card-body">
-                                    <div id="card-element">
+                                    <div id="card-element" class="field">
                                         <!-- A Stripe Element will be inserted here. -->
                                     </div>
                                     <!-- Used to display form errors. -->
