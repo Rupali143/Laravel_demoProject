@@ -90,7 +90,7 @@
 <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
     <div class="kt-header-mobile__logo">
         <a href="index.html">
-            <img alt="Logo" src="assets/media/logos/logo-light.png" />
+            {{--<img alt="Logo" src="{{ asset('assets/media/logos/logo-light.png')}}" />--}}
         </a>
     </div>
     <div class="kt-header-mobile__toolbar">
@@ -272,13 +272,13 @@
 <script src="{{asset('assets/js/scripts.bundle.js')}}" type="text/javascript"></script>
 <!--begin:: Vendor Plugins for custom pages -->
 <script src="{{asset('assets/plugins/custom/plugins/jquery-ui/jquery-ui.min.js')}}" type="text/javascript"></script>
-{{--<script src="{{asset('assets/plugins/custom/@fullcalendar/core/main.js')}}" type="text/javascript"></script>--}}
-{{--<script src="{{asset('assets/plugins/custom/@fullcalendar/daygrid/main.js')}}" type="text/javascript"></script>--}}
-{{--<script src="{{asset('assets/plugins/custom/@fullcalendar/google-calendar/main.js')}}" type="text/javascript"></script>--}}
-{{--<script src="{{asset('assets/plugins/custom/@fullcalendar/interaction/main.js')}}" type="text/javascript"></script>--}}
-{{--<script src="{{asset('assets/plugins/custom/@fullcalendar/list/main.js')}}" type="text/javascript"></script>--}}
-{{--<script src="{{asset('assets/plugins/custom/@fullcalendar/timegrid/main.js')}}" type="text/javascript"></script>--}}
-{{--<script src="{{asset('assets/plugins/custom/gmaps/gmaps.js')}}" type="text/javascript"></script>--}}
+<script src="{{asset('assets/plugins/custom/@fullcalendar/core/main.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/plugins/custom/@fullcalendar/daygrid/main.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/plugins/custom/@fullcalendar/google-calendar/main.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/plugins/custom/@fullcalendar/interaction/main.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/plugins/custom/@fullcalendar/list/main.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/plugins/custom/@fullcalendar/timegrid/main.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/plugins/custom/gmaps/gmaps.js')}}" type="text/javascript"></script>
 <script src="{{asset('assets/plugins/custom/flot/dist/es5/jquery.flot.js')}}" type="text/javascript"></script>
 <script src="{{asset('assets/plugins/custom/flot/source/jquery.flot.resize.js')}}" type="text/javascript"></script>
 <script src="{{asset('assets/plugins/custom/flot/source/jquery.flot.categories.js')}}" type="text/javascript"></script>
@@ -311,12 +311,12 @@
 <script src="{{asset('assets/plugins/custom/datatables.net-scroller/js/dataTables.scroller.min.js')}}" type="text/javascript"></script>
 <script src="{{asset('assets/plugins/custom/datatables.net-select/js/dataTables.select.min.js')}}" type="text/javascript"></script>
 <script src="{{asset('assets/plugins/custom/jstree/dist/jstree.js')}}" type="text/javascript"></script>
-{{--<script src="{{asset('assets/plugins/custom/jqvmap/dist/jquery.vmap.js')}}" type="text/javascript"></script>--}}
-{{--<script src="{{asset('assets/plugins/custom/jqvmap/dist/maps/jquery.vmap.world.js')}}" type="text/javascript"></script>--}}
-{{--<script src="{{asset('assets/plugins/custom/jqvmap/dist/maps/jquery.vmap.russia.js')}}" type="text/javascript"></script>--}}
-{{--<script src="{{asset('assets/plugins/custom/jqvmap/dist/maps/jquery.vmap.usa.js')}}" type="text/javascript"></script>--}}
-{{--<script src="{{asset('assets/plugins/custom/jqvmap/dist/maps/jquery.vmap.germany.js')}}" type="text/javascript"></script>--}}
-{{--<script src="{{asset('assets/plugins/custom/jqvmap/dist/maps/jquery.vmap.europe.js')}}" type="text/javascript"></script>--}}
+<script src="{{asset('assets/plugins/custom/jqvmap/dist/jquery.vmap.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/plugins/custom/jqvmap/dist/maps/jquery.vmap.world.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/plugins/custom/jqvmap/dist/maps/jquery.vmap.russia.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/plugins/custom/jqvmap/dist/maps/jquery.vmap.usa.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/plugins/custom/jqvmap/dist/maps/jquery.vmap.germany.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/plugins/custom/jqvmap/dist/maps/jquery.vmap.europe.js')}}" type="text/javascript"></script>
 <script src="{{asset('assets/plugins/custom/uppy/dist/uppy.min.js')}}" type="text/javascript"></script>
 
 <!--end:: Vendor Plugins for custom pages -->

@@ -34,34 +34,19 @@ class ProductController extends Controller
                 $products = $products->where('category_id', $request->input('category_id'));
             }
         $products =$products->paginate(3);
-//        dd($products);
-//            return view('products.index', compact('products', 'category'));
-//        }else{
-//                $category = Category::all();
-//                $products = Product::latest()->paginate(3);
                 return view('products.index', compact('products', 'category','request'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    /** Show the form for creating a new product. */
     public function create()
     {
         $category = Category::all();
         return view('products.create',compact('category'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    /* Store a newly created product.  */
     public function store(Request $request)
     {
-//        dd($request->all());
        $request->validate([
             'name' => 'required',
             'category_id' => 'required',
@@ -69,7 +54,6 @@ class ProductController extends Controller
             'price' => 'required',
             'quantity' => 'required',
             'subcategory_id' => 'required',
-//            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $product = new Product();
@@ -88,13 +72,11 @@ class ProductController extends Controller
             if(!is_dir('uploads/products')) {
                 mkdir('uploads/products', 0755, true);
             }
-//            echo'<pre>';print_r($files);exit;
             $i = 1;
             foreach ($files as $img) {
                 $extension = $img->getClientOriginalExtension();
                 $image = $img->getClientOriginalName();
                 $name = explode('.', $image)[0].'_'.$lastId.'_'. $i++ .'.'. $extension;
-//                echo'<pre>';print_r($image);exit;
                 $img->move($destinationPath, $name);
                 $productImage = new Product_image();
                 $productImage->product_id = $lastId;
@@ -107,12 +89,7 @@ class ProductController extends Controller
             ->with('success','Product created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    /** Display the specified product.*/
     public function show($id)
     {
         $product = Product::find($id);
@@ -120,29 +97,17 @@ class ProductController extends Controller
         return view('products.show',compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    /* Show the form for editing the specified product*/
     public function edit($id)
     {
         $category = Category::all();
         $product = Product::find($id);
        $catId = $product->category_id;
         $subcategory = Sub_categories::where('category_id',$catId)->get();
-//        $productimage = Product_image::where('product_id',$id)->get();
         return view('products.edit',compact('product','category','subcategory'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    /** Update the specified product **/
     public function update(Request $request, $id)
     {
 
@@ -154,9 +119,6 @@ class ProductController extends Controller
             'price' => 'required',
             'quantity' => 'required'
         ]);
-//        $validate1 =$request->validate([
-//            'files.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-//        ]);
         Product::whereId($id)->update($validate);
 
         if ($files = $request->file('file')) {
@@ -183,12 +145,7 @@ class ProductController extends Controller
             ->with('success','Product updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    /* Remove the specified product.*/
     public function destroy($id)
     {
         $product = Product::find($id)->delete();
@@ -199,7 +156,6 @@ class ProductController extends Controller
     public function deleteorder($id)
     {
         $image = Product_image::find($id)->delete();
-//        dd($image);
         $data = [
             'success' => true,
             'message'=> 'Image deleted Successfully'
@@ -207,54 +163,39 @@ class ProductController extends Controller
         return response()->json($data);
     }
 
+    /*Change active inactive status for products*/
     public function changeStatus(Request $request)
     {
-//        dd($request->all());
         $product = Product::find($request->id);
         $product->status = $request->status;
         $product->save();
-//        Product::whereId($request->id)->update($product);
         return response()->json(['success'=>'Status change successfully.']);
     }
 
+    /*Fetched subcategory*/
     public function fetchsubCategory($id){
         $subcategories = Sub_categories::where('category_id',$id)->pluck('name','id');
-//        dd($subcategories);
         return json_encode($subcategories);
-
-//        $subcategories = DB::table("sub_categories")->where("category_id",$id)->lists("name","id");
-//
-//        Project::where('project_active', 1)->lists('id','project_name');
-//        dd($subcategories);
-//        return json_encode($subcategories);
     }
 
-    public function usersCart(Request $request){
-        $products = Order::with('cartProducts','cartProducts.product')->get();
-       // dd($products);
 
-       // dd($request->input('userName'));
-        if (isset($request->userName)) { //echo'hello';die;
-//            $products = $products->where('name','LIKE', '%'.$request->input('userName').'%');
-            $products =  Order::with('cartProducts')->where('name','LIKE',$request->input('userName').'%')->paginate(3);
+    /*Display users product listing who purchased products*/
+    public function orderList(Request $request){
+        $products = Order::with('cartProducts','cartProducts.product');
+        if (isset($request->userName)) {
+            $products =  $products->where('name','LIKE','%'. $request->userName.'%');
         }
-//        dd($products);
-//        if (isset($request->status)) {
-//            $products = $products->where('status', $request->input('status'));
-//        }
-//        if (isset($request->category_id)) {
-//            $products = $products->where('category_id', $request->input('category_id'));
-//        }
-//        $products = $products->paginate(3);
-//
-//        return view('products.index', compact('products', 'category','request'));
-
-//        $products = Order::with('cartProducts')->get();
-//        dd($products);
-        return view('usersCart',compact('products'));
+        if (isset($request->status)) {
+            $products = $products->where('transaction_status', $request->status);
+        }
+        $products =$products->paginate(3);
+        return view('usersOrder',compact('products','request'));
     }
 
-    public function cartDetails($id){
-        dd($id);
+
+   /*order details by order id*/
+    public function orderDetails($id){
+        $products = Order::with('cartProducts','cartProducts.image')->where('id',$id)->paginate(2);
+        return view('orderViewDetails',compact('products'));
     }
 }

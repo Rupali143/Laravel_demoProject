@@ -43,9 +43,9 @@ Route::resource('subcategory','SubCategoryController');
 
 Route::get('fetch_subCategory/{id}','ProductController@fetchsubCategory')->name('fetch_subCategory');
 
-Route::get('usersCart','ProductController@usersCart')->name('users.cart');
+Route::get('orders','ProductController@orderList')->name('users.order');
 
-Route::get('cartDetails/{id}','ProductController@cartDetails')->name('users.cartDetails');
+Route::get('orderDetails/{id}','ProductController@orderDetails')->name('users.orderDetails');
 
 
 
@@ -107,6 +107,9 @@ Route::post('checkoutPost','Front\ShoppingCartController@checkoutPost')->name('p
 Route::get('placeOrder','Front\ShoppingCartController@placeOrder')->name('place.order');
 
 Route::get('myOrderProduct','Front\ShoppingCartController@myOrderProduct')->name('my.order');
+
+Route::get('myOrderDetails/{id}','Front\ShoppingCartController@myOrderDetails')->name('my.orderDetails');
+
 
 
 

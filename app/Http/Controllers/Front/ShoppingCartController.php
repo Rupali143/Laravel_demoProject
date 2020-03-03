@@ -157,15 +157,17 @@ class ShoppingCartController extends Controller
 
     public function myOrderProduct(){
         $userId = \Auth::user()->id;
-//        $products = Cart_product::with('orders')->where('user_id',$userId)->paginate(4);
-//        $products = Cart_product::with('product','image','orders')->where('user_id',$userId)->get();
-//       // $orders= Cart_product::with('orders')->get();
-//        $orders= Cart_product::with('orders')->where('user_id',$userId)->get();
-////        $cartProduct = Cart_product::all();
-//        dd($orders);
         $products = Order::with('cartProducts','cartProducts.image')->where('user_id',$userId)->paginate(2);
 //        dd($products);
-        return view('frontEnd.myCartProducts',compact('products'));
+        return view('frontEnd.myOrderProducts',compact('products'));
+    }
+
+    /*order details by order id*/
+    public function myOrderDetails($id){
+//        dd($id);
+        $userId = \Auth::user()->id;
+        $products = Order::with('cartProducts','cartProducts.image')->where('id',$id)->paginate(2);
+        return view('frontEnd.myOrderDetails',compact('products'));
     }
 
 

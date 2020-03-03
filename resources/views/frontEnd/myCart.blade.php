@@ -12,15 +12,6 @@
             <p align="center" class="message" style='margin-top:20px;color:red;'></p>
             <table class="table table-condensed">
                 <thead>
-                {{--<tr class="cart_menu">--}}
-                    {{--<td class="image">Product Image</td>--}}
-                    {{--<td class="description">Product Name</td>--}}
-                    {{--<td class="price">Price</td>--}}
-                    {{--<td class="quantity">Quantity</td>--}}
-                    {{--<td>Total</td>--}}
-                    {{--<td></td>--}}
-                    {{--<td></td>--}}
-                {{--</tr>--}}
                 <tr class="cart_menu">
                     <td class="image">Item</td>
                     <td class="description"></td>
