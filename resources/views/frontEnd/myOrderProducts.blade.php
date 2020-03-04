@@ -20,7 +20,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {{--@if(count($products) > 0)--}}
+                    @if(count($products) > 0)
                     @php $i = 1; @endphp
                         @foreach($products as $product)
                             {{--@foreach($images as $image)--}}
@@ -36,10 +36,9 @@
                                 <td><a class="btn btn-primary" href="{{ route('my.orderDetails',$product->id) }}">View Details</a></td>
                             </tr>
                         @endforeach
-
-                    {{--@else--}}
-                        {{--<tr><td><strong>No Items in Cart!!!</strong></td></tr>--}}
-                    {{--@endif--}}
+                    @else
+                        <tr><td><strong>No Items in Cart!!!</strong></td></tr>
+                    @endif
                     </tbody>
                 </table>
                 <div class="row"> {{ $products->links() }} </div>

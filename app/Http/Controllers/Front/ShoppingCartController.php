@@ -11,6 +11,8 @@ use App\Eloquent\Model\Order;
 use Session;
 use Charge;
 use Stripe;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMail;
 
 class ShoppingCartController extends Controller
 {
@@ -102,7 +104,11 @@ class ShoppingCartController extends Controller
     }
     //Place oder page view
     public function placeOrder(){
-        return view('frontEnd.placeOrder');
+        $oldCart = Session::get('cart');
+        $totalWithTax = $oldCart->totalPrice + $oldCart->totalPrice* 0.02;
+        $total = number_format($totalWithTax, 2);
+//        dd($total);
+        return view('frontEnd.placeOrder',['total' => $total]);
     }
 
     // After place order go to the payment page then save to the database table
@@ -116,7 +122,7 @@ class ShoppingCartController extends Controller
             $total = number_format($totalWithTax, 2);
             $dyanamicId = "order".'_'.$userId;
             $timestampId = $dyanamicId.'_'.time();
-//            dd($unique);
+//            dd($request->all());
             $token = $request->input('stripeToken');
             Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
             try{
@@ -151,13 +157,16 @@ class ShoppingCartController extends Controller
                 return redirect()->route('my.order')->with('error',$e->getMessage());
             }
             session()->forget('cart');
+            $userEmail = \Auth::user()->email;
+            $this->send($userEmail,$orderTimestampID);
             return redirect()->route('my.order')->with('success', 'Product Successfully Purchased. Your order id is:-  '.$orderTimestampID);
         }
     }
 
+    /*order listing */
     public function myOrderProduct(){
         $userId = \Auth::user()->id;
-        $products = Order::with('cartProducts','cartProducts.image')->where('user_id',$userId)->paginate(2);
+        $products = Order::with('cartProducts','cartProducts.image')->where('user_id',$userId)->paginate(3);
 //        dd($products);
         return view('frontEnd.myOrderProducts',compact('products'));
     }
@@ -166,9 +175,18 @@ class ShoppingCartController extends Controller
     public function myOrderDetails($id){
 //        dd($id);
         $userId = \Auth::user()->id;
-        $products = Order::with('cartProducts','cartProducts.image')->where('id',$id)->paginate(2);
+        $products = Order::with('cartProducts','cartProducts.image')->where('id',$id)->paginate(3);
         return view('frontEnd.myOrderDetails',compact('products'));
     }
 
+
+    public function send($email,$orderTimestampID)
+    {
+        $to_email = $email;
+        $data = array("email" => $email,"body" =>"Successfully purchased product..Your order id is:--".$orderTimestampID);
+        Mail::send('mail',$data,function ($message) use ($to_email){
+            $message->to($to_email)->subject('Laravel Product');
+        });
+    }
 
 }

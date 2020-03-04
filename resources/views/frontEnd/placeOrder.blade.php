@@ -2,12 +2,6 @@
 
 @section('main-content')
     <style>
-        .group {
-            background: white;
-            box-shadow: 0 7px 14px 0 rgba(49, 49, 93, 0.10), 0 3px 6px 0 rgba(0, 0, 0, 0.08);
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
 
         label {
             position: relative;
@@ -30,57 +24,6 @@
             margin-right: 30px;
         }
 
-        .field {
-            background: transparent;
-            font-weight: 300;
-            border: 0;
-            color: #31325F;
-            outline: none;
-            flex: 1;
-            padding-right: 10px;
-            padding-left: 10px;
-            cursor: text;
-        }
-
-        .field::-webkit-input-placeholder {
-            color: #CFD7E0;
-        }
-
-        .field::-moz-placeholder {
-            color: #CFD7E0;
-        }
-        .outcome {
-            float: left;
-            width: 100%;
-            padding-top: 8px;
-            min-height: 24px;
-            text-align: center;
-        }
-
-        .success,
-        .error {
-            display: none;
-            font-size: 13px;
-        }
-
-        .success.visible,
-        .error.visible {
-            display: inline;
-        }
-
-        .error {
-            color: #E4584C;
-        }
-
-        .success {
-            color: #666EE8;
-        }
-
-        .success .token {
-            font-weight: 500;
-            font-size: 13px;
-        }
-
     </style>
     <script src="https://js.stripe.com/v3/"></script>
     <div class="shopper-informations">
@@ -89,11 +32,11 @@
             <div class="col-sm-12 clearfix">
                 <div class="bill-to">
                     <div class="form-one">
-                        {{--<div class="card">--}}
                         <form action="{{ route('post.checkout') }}" method="post" id="payment-form">
                             @csrf
                             <label class='control-label'>Name</label><input type="text" placeholder="Name" name="fullName" id="fullName" required value="{{Auth::user()->name}}">
                             <label class='control-label'>Address</label><input type="text" placeholder="Address" name="address" id="address" required>
+                            <label class='control-label'> Total Amount</label><input type="text" name="total_amount" value="{{ $total }}" readonly required>
                             <div class="form-group">
                                 <div class="card-header">
                                     <label for="card-element">
@@ -109,11 +52,11 @@
                                     {{--<input type="hidden" name="plan" value="{{ $plan->id }}" />--}}
                                 </div>
                             </div>
+
                             <div class="card-footer">
                                 <button class="btn btn-primary pull-right" type="submit">Pay</button>
                             </div>
                         </form>
-                        {{--</div>--}}
                     </div>
                 </div>
             </div>

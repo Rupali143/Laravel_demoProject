@@ -179,7 +179,7 @@ class ProductController extends Controller
     }
 
 
-    /*Display users product listing who purchased products*/
+    /*Display users orderList*/
     public function orderList(Request $request){
         $products = Order::with('cartProducts','cartProducts.product');
         if (isset($request->userName)) {
