@@ -37,39 +37,18 @@ class UserController extends Controller
     }
 
 
-//    public function login(Request $request){
-//        if (\Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-//            $user = User::where('email', $request->email)->first();
-//            return redirect('/');
-//        } else {
-////            session::flush();
-//            return redirect()->back()->with("error","Incorrect login credentials. Please try again.");
-////            return redirect()->back()->withErrors(['Incorrect login credentials']);
-//        }
-//    }
-
     public function profileDisplay(){
             return view('frontEnd.profile');
     }
 
     public function updateProfile(Request $request){
-//        dd($request->all());
-
         $validate =$request->validate([
             'name' => 'required',
             'email' => 'required',
         ]);
         
         User::whereId($request->userid)->update($validate);
-
-//        $user = new User();
-//        $user->name = $request->input('name');
-//        $user->email = $request->input('email');
-////        $user->password = Hash::make($request->input('password'));
-//        User::whereId($request->userid)->update($user);;
-//        $user->confirm_password = Hash::make($request->input('confirm_password'));
         return redirect()->back()->with('success','Profile Updated successfully.');
-//        return view('frontEnd.myAccount');
     }
 
 
@@ -92,9 +71,7 @@ class UserController extends Controller
             'current-password' => 'required',
             'new-password' => 'required|string|min:6|confirmed',
         ]);
-
-//        dd($validatedData);
-
+        
         $user = \Auth::user();
         $user->password = bcrypt($request->get('new-password'));
         $user->save();
@@ -102,72 +79,4 @@ class UserController extends Controller
 
     }
 
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

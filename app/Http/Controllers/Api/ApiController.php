@@ -59,14 +59,10 @@ class ApiController extends Controller
     }
 
     //API for logout
-    public function logout(){  //dd(!(\Auth::check()));
-        if (!(\Auth::check())) {
-
-            \Auth::user()->token()->revoke();
-            return response()->json(['status' => true, 'message' => 'Successfully logged out.', 'data' => []]);
-        }else{
-            return response()->json(['status' => false, 'message' => 'Something wents wrong!!.', 'data' => []]);
-        }
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+        return response()->json(['status' => true,'message' => 'Successfully logged out','data'=>[]]);
     }
 
    //API for add product to wishList
@@ -80,17 +76,30 @@ class ApiController extends Controller
             $favourite->product_id = $productId;
             $favourite->customer_id = $userId;
             $favourite->save();
-            return response()->json(['status' => true, 'message' => 'Added to Favourite list successfully!!.', 'data' => $favourite]);
+            $result =  Favourite::where('customer_id',$userId)->get();
+            return response()->json(['status' => true, 'message' => 'Added to Favourite list successfully!!.', 'data' => $result]);
         }
     }
     //My profile update
     public function myProfile(Request $request){
-        $validate =$request->validate([
-            'name' => 'required',
-            'email' => 'required',
-        ]);
-        $user = User::whereId($request->userId)->update($validate);
+
+        $data = array();
+        if($request->email){
+            $data['email'] = $request->email;
+        }if($request->name){
+            $data['name'] = $request->name;
+        }
+        if($data)
+        \DB::table('users')->where('id', $request->userId)->update($data);
+        $user =  User::whereId($request->userId)->first();
+//        dd($user);
         return response()->json(['status' => true, 'message' => 'Profile Updated Successfully!!.', 'data' => $user]);
+    }
+
+    public function getUser()
+    {
+        $user = \Auth::user();
+        dd($user);
     }
 
 }
