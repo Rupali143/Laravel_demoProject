@@ -119,7 +119,10 @@ class ShoppingCartController extends Controller
             $oldCart = Session::get('cart');
             $userId = \Auth::user()->id;
             $totalWithTax = $oldCart->totalPrice + $oldCart->totalPrice* 0.02;
-            $total = number_format($totalWithTax, 2);
+//            $total = number_format($totalWithTax, 2);
+//            $totalWithTax =  $request->input('total_amount');
+//            $total = number_format($totalWithTax, 2);
+//            dd($totalWithTax);
             $dyanamicId = "order".'_'.$userId;
             $timestampId = $dyanamicId.'_'.time();
 //            dd($request->all());
@@ -139,10 +142,12 @@ class ShoppingCartController extends Controller
                 $order->payment_id = $charge->id;
                 $order->transaction_status = 1;
                 $order->order_timestampID = $timestampId;
-                $order->total_amount = $total;
+                $order->total_amount = $totalWithTax;
                 $order->save();
                 $orderTimestampID= $order->order_timestampID;
-                //dd($orderTimestampID);
+                $orderCreatedAt = $order->created_at;
+                $orderAddress = $order->address;
+                 //dd($orderTimestampID);
                 $orderId = $order->id;
                 foreach ($oldCart->item as $products){
                     $cartProduct = new Cart_product();
@@ -158,7 +163,7 @@ class ShoppingCartController extends Controller
             }
             session()->forget('cart');
             $userEmail = \Auth::user()->email;
-            $this->send($userEmail,$orderTimestampID);
+            $this->send($userEmail,$orderTimestampID,$oldCart,$orderCreatedAt,$orderAddress);
             return redirect()->route('my.order')->with('success', 'Product Successfully Purchased. Your order id is:-  '.$orderTimestampID);
         }
     }
@@ -180,13 +185,33 @@ class ShoppingCartController extends Controller
     }
 
 
-    public function send($email,$orderTimestampID)
+    public function send($email,$orderTimestampID,$oldCart,$orderCreatedAt,$orderAddress)
     {
+        $totalWithTax = $oldCart->totalPrice + $oldCart->totalPrice* 0.02;
         $to_email = $email;
-        $data = array("email" => $email,"body" =>"Successfully purchased product..Your order id is:--".$orderTimestampID);
+        $data = array("email" => $email,"orderCreatedAt"=>$orderCreatedAt,"totalWithTax"=>$totalWithTax ,"products" => $oldCart->item,"body" =>"Your order:-  ".$orderTimestampID,"orderAddress" =>$orderAddress);
         Mail::send('mail',$data,function ($message) use ($to_email){
-            $message->to($to_email)->subject('Laravel Product');
+            $message->to($to_email)->subject('Order Confirmation');
         });
+    }
+
+    public function test(Request $request){
+//        dd($request->all());
+        $totalWithTax =  $request->input('total_amount');
+        $token = $request->input('stripeToken');
+        Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+        try {
+            $charge = Stripe\Charge::create ([
+                "amount" => $totalWithTax * 100,
+                "currency" => "INR",
+                "source" => $token,
+                "description" => "Test payment"
+            ]);
+            return redirect()->back()->with('success-message', 'Payment done successfully !' );
+        } catch ( \Exception $e ) {
+            return redirect()->back()->with('fail-message', "Error! Please Try again." );
+//            return redirect()->back ();
+        }
     }
 
 }

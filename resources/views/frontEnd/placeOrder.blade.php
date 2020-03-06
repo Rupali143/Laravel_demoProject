@@ -1,7 +1,21 @@
 @extends('frontEnd/layouts/master')
 
+
 @section('main-content')
+
     <style>
+
+        /*form {*/
+            /*width: 480px;*/
+            /*margin: 20px 0;*/
+        /*}*/
+
+        .group {
+            background: white;
+            box-shadow: 0 7px 14px 0 rgba(49, 49, 93, 0.10), 0 3px 6px 0 rgba(0, 0, 0, 0.08);
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
 
         label {
             position: relative;
@@ -9,7 +23,7 @@
             font-weight: 300;
             height: 40px;
             line-height: 40px;
-            /*margin-left: 20px;*/
+            margin-left: 20px;
             display: flex;
             flex-direction: row;
         }
@@ -24,115 +38,218 @@
             margin-right: 30px;
         }
 
+        .field {
+            background: transparent;
+            font-weight: 300;
+            border: 0;
+            color: #31325F;
+            outline: none;
+            flex: 1;
+            padding-right: 10px;
+            padding-left: 10px;
+            cursor: text;
+        }
+
+        .field::-webkit-input-placeholder {
+            color: #CFD7E0;
+        }
+
+        .field::-moz-placeholder {
+            color: #CFD7E0;
+        }
+
+        /*button {*/
+            /*float: left;*/
+            /*display: block;*/
+            /*background: #666EE8;*/
+            /*color: white;*/
+            /*box-shadow: 0 7px 14px 0 rgba(49, 49, 93, 0.10), 0 3px 6px 0 rgba(0, 0, 0, 0.08);*/
+            /*border-radius: 4px;*/
+            /*border: 0;*/
+            /*margin-top: 20px;*/
+            /*font-size: 15px;*/
+            /*font-weight: 400;*/
+            /*width: 100%;*/
+            /*height: 40px;*/
+            /*line-height: 38px;*/
+            /*outline: none;*/
+        /*}*/
+
+        /*button:focus {*/
+            /*background: #555ABF;*/
+        /*}*/
+
+        /*button:active {*/
+            /*background: #43458B;*/
+        /*}*/
+
+        /*.outcome {*/
+            /*float: left;*/
+            /*width: 100%;*/
+            /*padding-top: 8px;*/
+            /*min-height: 24px;*/
+            /*text-align: center;*/
+        /*}*/
+
+        .success,
+        .error {
+            display: none;
+            font-size: 13px;
+        }
+
+        .success.visible,
+        .error.visible {
+            display: inline;
+        }
+
+        .error {
+            color: #E4584C;
+        }
+
+        .success {
+            color: #666EE8;
+        }
+
+        .success .token {
+            font-weight: 500;
+            font-size: 13px;
+        }
+
     </style>
-    <script src="https://js.stripe.com/v3/"></script>
     <div class="shopper-informations">
         <div class="row">
-            <div id="charge-error" class="alert alert-danger {{ !Session::has('error') ? 'hidden' : ''}}">  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>{{ Session::get('error') }}</div>
-            <div class="col-sm-12 clearfix">
-                <div class="bill-to">
-                    <div class="form-one">
-                        <form action="{{ route('post.checkout') }}" method="post" id="payment-form">
-                            @csrf
-                            <label class='control-label'>Name</label><input type="text" placeholder="Name" name="fullName" id="fullName" required value="{{Auth::user()->name}}">
-                            <label class='control-label'>Address</label><input type="text" placeholder="Address" name="address" id="address" required>
-                            <label class='control-label'> Total Amount</label><input type="text" name="total_amount" value="{{ $total }}" readonly required>
-                            <div class="form-group">
-                                <div class="card-header">
-                                    <label for="card-element">
-                                        Enter your credit card information
-                                    </label>
-                                </div>
-                                <div class="card-body">
-                                    <div id="card-element" class="field">
-                                        <!-- A Stripe Element will be inserted here. -->
-                                    </div>
-                                    <!-- Used to display form errors. -->
-                                    <div id="card-errors" role="alert"></div>
-                                    {{--<input type="hidden" name="plan" value="{{ $plan->id }}" />--}}
-                                </div>
-                            </div>
-
-                            <div class="card-footer">
-                                <button class="btn btn-primary pull-right" type="submit">Pay</button>
-                            </div>
-                        </form>
+           <div id="charge-error" class="alert alert-danger {{ !Session::has('error') ? 'hidden' : ''}}">  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>{{ Session::get('error') }}</div>
+                <form action="{{route('post.checkout')}} " method="POST">
+                    @csrf
+                    <input type="hidden" name="stripeToken" />
+                    <div class="col-md-6">
+                        <div class="group">
+                            <label>
+                                <span>Name</span>
+                              <input placeholder="Name" class="field" name="fullName" id="fullName" required value="{{Auth::user()->name}}">
+                            </label>
+                            <label>
+                                <span>Address</span>
+                                <input placeholder="Address" class="field" name="address" id="address" required>
+                            </label>
+                        </div>
                     </div>
-                </div>
-            </div>
+                    <div class="col-md-6">
+                    <div class="group">
+                        <label>
+                            <span>Card number</span>
+                            <div id="card-number-element" class="field"></div>
+                        </label>
+                        <label>
+                            <span>Expiry date</span>
+                            <div id="card-expiry-element" class="field"></div>
+                        </label>
+                        <label>
+                            <span>CVC</span>
+                            <div id="card-cvc-element" class="field"></div>
+                        </label>
+                        <label>
+                            <span>Postal code</span>
+                            <input id="postal-code" name="postal_code" class="field" placeholder="90210" />
+                        </label>
+                        <label>
+                            <span>Total Amount</span>
+                            <input name="total_amount" value="{{ $total }}" readonly class="field"  />
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary pull-right">Pay ({{ $total }})</button>
+                    <div class="outcome">
+                        <div class="error"></div>
+                        <div class="success">
+                            Success! Your Stripe token is <span class="token"></span>
+                        </div>
+                    </div>
+                    </div>
+                </form>
+
         </div>
-    </div>
+        </div>
 @endsection
 
 @section('scripts')
-    <script>
+    <script src="https://js.stripe.com/v3/"></script>
+<script>
+    var stripe = Stripe('pk_test_umCCVM2is5bywwiN4BRvPTGe00HC3kP7ia');
+    var elements = stripe.elements();
 
-        var stripe = Stripe('{{ env("STRIPE_KEY") }}');
+    var style = {
+        base: {
+            iconColor: '#666EE8',
+            color: '#31325F',
+            lineHeight: '40px',
+            fontWeight: 300,
+            fontFamily: 'Helvetica Neue',
+            fontSize: '15px',
 
-        // Create an instance of Elements.
-        var elements = stripe.elements();
-
-        var style = {
-            base: {
-                color: '#32325d',
-                lineHeight: '18px',
-                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                fontSmoothing: 'antialiased',
-                fontSize: '16px',
-                '::placeholder': {
-                    color: '#aab7c4'
-                }
+            '::placeholder': {
+                color: '#CFD7E0',
             },
-            invalid: {
-                color: '#fa755a',
-                iconColor: '#fa755a'
-            }
-        };
+        },
+    };
 
-        // Create an instance of the card Element.
-        var card = elements.create('card', {style: style});
+    var cardNumberElement = elements.create('cardNumber', {
+        style: style
+    });
+    cardNumberElement.mount('#card-number-element');
 
-        // Add an instance of the card Element into the `card-element` <div>.
-        card.mount('#card-element');
+    var cardExpiryElement = elements.create('cardExpiry', {
+        style: style
+    });
+    cardExpiryElement.mount('#card-expiry-element');
 
-        // Handle real-time validation errors from the card Element.
-        card.addEventListener('change', function(event) {
-            var displayError = document.getElementById('card-errors');
-            if (event.error) {
-                displayError.textContent = event.error.message;
-            } else {
-                displayError.textContent = '';
-            }
-        });
+    var cardCvcElement = elements.create('cardCvc', {
+        style: style
+    });
+    cardCvcElement.mount('#card-cvc-element');
 
-        var form = document.getElementById('payment-form');
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
 
-            stripe.createToken(card).then(function(result) {
-                if (result.error) {
-                    // Inform the user if there was an error.
-                    var errorElement = document.getElementById('card-errors');
-                    errorElement.textContent = result.error.message;
-                } else {
-                    // Send the token to your server.
-                    stripeTokenHandler(result.token);
-                }
-            });
-        });
+    function setOutcome(result) {
+        var successElement = document.querySelector('.success');
+        var errorElement = document.querySelector('.error');
+        successElement.classList.remove('visible');
+        errorElement.classList.remove('visible');
 
-        // Submit the form with the token ID.
-        function stripeTokenHandler(token) {
-            // Insert the token ID into the form so it gets submitted to the server
-            var form = document.getElementById('payment-form');
-            var hiddenInput = document.createElement('input');
-            hiddenInput.setAttribute('type', 'hidden');
-            hiddenInput.setAttribute('name', 'stripeToken');
-            hiddenInput.setAttribute('value', token.id);
-            form.appendChild(hiddenInput);
+        if (result.token) {
+            // In this example, we're simply displaying the token
+            //successElement.querySelector('.token').textContent = result.token.id;
+            //successElement.classList.add('visible');
 
-            // Submit the form
+            // In a real integration, you'd submit the form with the token to your backend server
+            var form = document.querySelector('form');
+            form.querySelector('input[name="stripeToken"]').setAttribute('value', result.token.id);
             form.submit();
+        } else if (result.error) {
+            errorElement.textContent = result.error.message;
+            errorElement.classList.add('visible');
         }
-    </script>
+    }
+
+    cardNumberElement.on('change', function(event) {
+        setOutcome(event);
+    });
+
+    cardExpiryElement.on('change', function(event) {
+        setOutcome(event);
+    });
+
+    cardCvcElement.on('change', function(event) {
+        setOutcome(event);
+    });
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var options = {
+            address_zip: document.getElementById('postal-code').value,
+//            fullName: document.getElementById('fullName').value,
+//            address: document.getElementById('address').value,
+        };
+        stripe.createToken(cardNumberElement, options).then(setOutcome);
+    });
+
+</script>
 @endsection

@@ -110,6 +110,8 @@ Route::get('myOrderProduct','Front\ShoppingCartController@myOrderProduct')->name
 
 Route::get('myOrderDetails/{id}','Front\ShoppingCartController@myOrderDetails')->name('my.orderDetails');
 
+Route::post('test','Front\ShoppingCartController@test')->name('post.test');
+
 
 
 
