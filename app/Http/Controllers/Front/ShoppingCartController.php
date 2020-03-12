@@ -137,8 +137,24 @@ class ShoppingCartController extends Controller
                     "description" => \Auth::user()->email,
 
               ));
-            //   dd($customer);
+           
 
+                Stripe\InvoiceItem::create([
+                "amount" => $totalWithTax * 100,
+                "currency" => "INR",
+                "customer" => $customer->id,
+                "description" => "One-time setup fee",
+              ]);
+
+
+                $invoice = Stripe\Invoice::create([
+                    "customer" => $customer->id,
+                    "collection_method" => "send_invoice",
+                    "days_until_due" => 30,
+                ]);
+            //    $invoice->sendInvoice();
+
+                //dd($invoice);
                 $charge = Stripe\Charge::create ([
                     "amount" => $totalWithTax * 100,
                     "currency" => "INR",
@@ -146,7 +162,6 @@ class ShoppingCartController extends Controller
                     "customer" => $customer->id,
                     "description" => "Test payment"
                 ]);
-                // dd($charge['status']);
                 if($charge['status'] == "succeeded"){
                 $order = new Order();
                 $order->user_id = $userId;
@@ -177,7 +192,6 @@ class ShoppingCartController extends Controller
             }
             catch (Stripe_InvalidRequestError $e)
             {
-                // Invalid parameters were supplied to Stripe's API
                 $userEmail = \Auth::user()->email;
                 $this->sendErrorEmail($userEmail,$e->getMessage());
                 return redirect()->route('my.order')->with('error', $e->getMessage());
@@ -197,7 +211,7 @@ class ShoppingCartController extends Controller
             session()->forget('cart');
             $userEmail = \Auth::user()->email;
             $this->send($userEmail,$orderTimestampID,$oldCart,$orderCreatedAt,$orderAddress);
-            return redirect()->route('my.order')->with('success', 'Product Successfully Purchased. Your order id is:-  '.$orderTimestampID);
+            return redirect()->route('my.order')->with('success', 'Payment Successfully done. Your order id is:-  '.$orderTimestampID);
         }
     }
 
@@ -233,7 +247,7 @@ class ShoppingCartController extends Controller
     { //dd($errorMessage);
         // $totalWithTax = $oldCart->totalPrice + $oldCart->totalPrice* 0.02;
         $to_email = $email;
-        $data = array("email" => $email,"body" => $errorMessage);
+        $data = array("email" => $email,"body" =>$errorMessage);
         Mail::send('mailError',$data,function ($message) use ($to_email){
             $message->to($to_email)->subject('Order Failed');
         });
