@@ -129,12 +129,25 @@ class ShoppingCartController extends Controller
             $token = $request->input('stripeToken');
             Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
             try{
+
+                $customer = Stripe\Customer::create(array(
+                    // "card"        => $token,
+                    "source" => $token,
+                    "email"       => \Auth::user()->email,
+                    "description" => \Auth::user()->email,
+
+              ));
+            //   dd($customer);
+
                 $charge = Stripe\Charge::create ([
                     "amount" => $totalWithTax * 100,
                     "currency" => "INR",
-                    "source" => $token,
+                    // "source" => $token,
+                    "customer" => $customer->id,
                     "description" => "Test payment"
                 ]);
+                // dd($charge['status']);
+                if($charge['status'] == "succeeded"){
                 $order = new Order();
                 $order->user_id = $userId;
                 $order->name = $request->input('fullName');
@@ -147,7 +160,6 @@ class ShoppingCartController extends Controller
                 $orderTimestampID= $order->order_timestampID;
                 $orderCreatedAt = $order->created_at;
                 $orderAddress = $order->address;
-                 //dd($orderTimestampID);
                 $orderId = $order->id;
                 foreach ($oldCart->item as $products){
                     $cartProduct = new Cart_product();
@@ -157,9 +169,30 @@ class ShoppingCartController extends Controller
                     $cartProduct->order_id = $orderId;
                     $cartProduct->save();
                 }
-
+            }
             }catch (\Exception $e){
+                $userEmail = \Auth::user()->email;
+                $this->sendErrorEmail($userEmail,$e->getMessage());
                 return redirect()->route('my.order')->with('error',$e->getMessage());
+            }
+            catch (Stripe_InvalidRequestError $e)
+            {
+                // Invalid parameters were supplied to Stripe's API
+                $userEmail = \Auth::user()->email;
+                $this->sendErrorEmail($userEmail,$e->getMessage());
+                return redirect()->route('my.order')->with('error', $e->getMessage());
+            }
+            catch(Stripe_CardError $e)
+            {
+                $userEmail = \Auth::user()->email;
+                $this->sendErrorEmail($userEmail,$e->getMessage());
+                return redirect()->route('my.order')->with('error', $e->getMessage());
+            }
+            catch (Stripe_Error $e) 
+            { 
+                $userEmail = \Auth::user()->email;
+                $this->sendErrorEmail($userEmail,$e->getMessage());
+                return redirect()->route('my.order')->with('error', $e->getMessage());
             }
             session()->forget('cart');
             $userEmail = \Auth::user()->email;
@@ -192,6 +225,17 @@ class ShoppingCartController extends Controller
         $data = array("email" => $email,"orderCreatedAt"=>$orderCreatedAt,"totalWithTax"=>$totalWithTax ,"products" => $oldCart->item,"body" =>"Your order:-  ".$orderTimestampID,"orderAddress" =>$orderAddress);
         Mail::send('mail',$data,function ($message) use ($to_email){
             $message->to($to_email)->subject('Order Confirmation');
+        });
+    }
+
+
+    public function sendErrorEmail($email,$errorMessage)
+    { //dd($errorMessage);
+        // $totalWithTax = $oldCart->totalPrice + $oldCart->totalPrice* 0.02;
+        $to_email = $email;
+        $data = array("email" => $email,"body" => $errorMessage);
+        Mail::send('mailError',$data,function ($message) use ($to_email){
+            $message->to($to_email)->subject('Order Failed');
         });
     }
 
